@@ -8,14 +8,13 @@ import {
   SidebarRail,
   useSidebar,
 } from "@/components/ui/sidebar";
+
 import { BookOpen, PieChart, Settings2 } from "lucide-react";
+import { useSession } from "next-auth/react";
 import React from "react";
 import { NavUser } from "./nav-user";
 import { NavLogo } from "./nav-logo";
 import { cn } from "@/lib/utils";
-
-import { Logo, LogoWithText } from "@/components/public/logo";
-import Link from "next/link";
 
 const data = {
   user: {
@@ -35,6 +34,13 @@ export default function CustomSidebar({
   ...props
 }: React.ComponentProps<typeof Sidebar>) {
   const sidebar = useSidebar();
+  const { data: session, status } = useSession();
+
+  if (status === "loading") {
+    return null;
+  }
+
+  const user = session?.user;
 
   return (
     <Sidebar collapsible="icon" {...props}>
@@ -43,7 +49,13 @@ export default function CustomSidebar({
       </SidebarHeader>
       <SidebarContent></SidebarContent>
       <SidebarFooter>
-        <NavUser user={data.user} />
+        <NavUser
+          user={{
+            image: user?.image ?? "",
+            name: user?.name ?? "User",
+            email: user?.email ?? "",
+          }}
+        />
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>

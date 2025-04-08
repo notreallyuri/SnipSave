@@ -20,11 +20,14 @@ const routes: Route[] = [
 export function middleware(req: NextRequest) {
   const path = req.nextUrl.pathname;
   const route = routes
-    .sort((a, b) => b.ref.length - a.ref.length) 
+    .sort((a, b) => b.ref.length - a.ref.length)
     .find((route) => path === route.ref || path.startsWith(`${route.ref}/`));
 
-  const token = req.cookies.get("token")?.value || null;
-  const isLoggedIn = !!token;
+  const sessionToken =
+    req.cookies.get("__Secure-next-auth.session-token")?.value || // HTTPS
+    req.cookies.get("next-auth.session-token")?.value || // HTTP
+    null;
+  const isLoggedIn = !!sessionToken;
 
   if (!route) {
     return NextResponse.next();

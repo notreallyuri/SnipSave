@@ -11,9 +11,9 @@ import { useSearchParams, useRouter } from "next/navigation";
 import { SignIn } from "./signin";
 import { SignUp } from "./signup";
 import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGithub, faGoogle } from "@fortawesome/free-brands-svg-icons";
+import { signIn } from "next-auth/react";
 
 export default function AuthContainer() {
   const router = useRouter();
@@ -29,8 +29,12 @@ export default function AuthContainer() {
   return (
     <Tabs defaultValue={tab} onValueChange={handleTabChange} className="w-100">
       <TabsList className="grid w-full grid-cols-2">
-        <TabsTrigger value="signup">Sign Up</TabsTrigger>
-        <TabsTrigger value="signin">Sign In</TabsTrigger>
+        <TabsTrigger value="signup" className="cursor-pointer">
+          Sign Up
+        </TabsTrigger>
+        <TabsTrigger value="signin" className="cursor-pointer">
+          Sign In
+        </TabsTrigger>
       </TabsList>
       <TabsContent value="signup">
         <Card>
@@ -50,16 +54,28 @@ export default function AuthContainer() {
           <CardContent>
             <SignIn />
           </CardContent>
-          <Separator />
-          <CardFooter className="flex-col gap-4">
-            <Button className="w-full" variant={"outline"}>
-              Sign in with Github
-              <FontAwesomeIcon icon={faGithub} />
+          <div className="flex items-center justify-center gap-4">
+            <div className="h-0.25 w-30 bg-black/25 dark:bg-white/50" />
+            or
+            <div className="h-0.25 w-30 bg-black/25 dark:bg-white/50" />
+          </div>
+          <CardFooter className="grid grid-cols-2 gap-6">
+            <Button
+              className="w-full cursor-pointer"
+              onClick={() => signIn("github")}
+              variant={"outline"}
+            >
+              <FontAwesomeIcon icon={faGithub} className="text-lg" />
+              Github
             </Button>
-            <Separator />
-            <Button className="w-full" variant={"outline"}>
-              Sign in with Google
-              <FontAwesomeIcon icon={faGoogle} />
+
+            <Button
+              className="w-full cursor-pointer"
+              onClick={() => signIn("google")}
+              variant={"outline"}
+            >
+              <FontAwesomeIcon icon={faGoogle} className="text-lg" />
+              Google
             </Button>
           </CardFooter>
         </Card>

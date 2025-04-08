@@ -7,7 +7,7 @@ export function NavLogo() {
   return (
     <SidebarMenu>
       <SidebarMenuItem>
-        <Link href={"/dashboard"}>
+        <Link href={"/home"}>
           <SidebarMenuButton
             size="lg"
             className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"

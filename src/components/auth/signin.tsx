@@ -13,6 +13,7 @@ import { Button } from "../ui/button";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
+import { signIn } from "next-auth/react";
 import { toast } from "sonner";
 import { z } from "zod";
 
@@ -34,19 +35,17 @@ export function SignIn() {
   });
 
   const onSubmit = async (data: LoginSchema) => {
-    const res = await fetch("/api/auth/signin", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
+    const res = await signIn("credentials", {
+      email: data.email,
+      password: data.password,
+      redirect: false,
     });
 
-    if (res.ok) {
+    if (res?.ok) {
       toast.success("Sign in successful!");
       router.push("/dashboard");
     } else {
-      toast.error("Something went wrong");
+      toast.error("Something went wrong", { description: res?.error });
     }
   };
 
@@ -79,7 +78,7 @@ export function SignIn() {
             </FormItem>
           )}
         />
-        <Button type="submit" className="w-full">
+        <Button type="submit" className="w-full cursor-pointer">
           Enter
         </Button>
       </form>

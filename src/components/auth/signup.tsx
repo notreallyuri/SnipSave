@@ -47,11 +47,26 @@ export function SignUp() {
     },
   });
 
-  const onSubmit = (data: SignUpSchema) => {
-    router.push("/");
-    toast.success("Sign up successful!");
+  const onSubmit = async (data: SignUpSchema) => {
+    const res = await fetch("/api/auth/signup", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        name: data.username,
+        email: data.email,
+        password: data.password,
+      }),
+    });
 
-    console.log(data);
+    if (res.ok) {
+      toast.success("Sign up successful!");
+      router.push("/");
+    } else {
+      const errorData = await res.json();
+      toast.error(errorData.error || "Something went wrong");
+    }
   };
 
   return (
@@ -109,7 +124,7 @@ export function SignUp() {
             </FormItem>
           )}
         />
-        <Button className="w-full" type="submit">
+        <Button className="w-full cursor-pointer" type="submit">
           Create
         </Button>
       </form>

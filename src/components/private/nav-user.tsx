@@ -24,13 +24,17 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 import Link from "next/link";
+import { signOut } from "next-auth/react";
+import React from "react";
+import { SettingsDialog } from "./dialog-preferences";
 
 export function NavUser({
   user,
 }: {
-  user: { name: string; email: string; avatar: string };
+  user: { name: string; email: string; image: string };
 }) {
   const { isMobile } = useSidebar();
+  const [dialogOpen, setDialogOpen] = React.useState(false);
 
   return (
     <SidebarMenu>
@@ -42,7 +46,7 @@ export function NavUser({
               className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
             >
               <Avatar className="size-8 rounded-lg">
-                <AvatarImage src={user.avatar} alt={user.name} />
+                <AvatarImage src={user.image} alt={user.name} />
                 <AvatarFallback className="rounded-lg">
                   {user.name?.charAt(0).toUpperCase() || "CN"}
                 </AvatarFallback>
@@ -63,7 +67,7 @@ export function NavUser({
             <DropdownMenuLabel className="p-0 font-normal">
               <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                 <Avatar className="h-8 w-8 rounded-lg">
-                  <AvatarImage src={user.avatar} alt={user.name} />
+                  <AvatarImage src={user.image} alt={user.name} />
                   <AvatarFallback className="rounded-lg">CN</AvatarFallback>
                 </Avatar>
                 <div className="grid flex-1 text-left text-sm leading-tight">
@@ -85,25 +89,27 @@ export function NavUser({
                 <User className="mr-1 h-4 w-4" />
                 <span>Profile</span>
               </DropdownMenuItem>
-              <Link href={"/settings"}>
-                <DropdownMenuItem>
-                  <Settings className="mr-1 h-4 w-4" />
-                  <span>Settings</span>
-                </DropdownMenuItem>
-              </Link>
+              <DropdownMenuItem onClick={() => setDialogOpen(true)}>
+                <Settings className="mr-1 h-4 w-4" />
+                <span>Preferences</span>
+              </DropdownMenuItem>
               <DropdownMenuItem>
                 <CreditCard className="mr-1 h-4 w-4" />
                 <span>Billing</span>
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem className="cursor-pointer">
+            <DropdownMenuItem
+              onClick={() => signOut({ callbackUrl: "/" })}
+              className="cursor-pointer"
+            >
               <LogOut className="mr-1 h-4 w-4" />
               <span>Sign Out</span>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </SidebarMenuItem>
+      <SettingsDialog open={dialogOpen} onOpenChange={setDialogOpen} />
     </SidebarMenu>
   );
 }
