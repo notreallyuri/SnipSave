@@ -4,24 +4,18 @@ import {
   SidebarContent,
   SidebarFooter,
   SidebarHeader,
+  SidebarMenuItem,
   SidebarRail,
   useSidebar,
 } from "@/components/ui/sidebar";
-import {
-  AudioWaveform,
-  BookOpen,
-  Bot,
-  Command,
-  Frame,
-  GalleryVerticalEnd,
-  Map,
-  PieChart,
-  Settings2,
-  SquareTerminal,
-} from "lucide-react";
+import { BookOpen, PieChart, Settings2 } from "lucide-react";
 import React from "react";
 import { NavUser } from "./nav-user";
+import { NavLogo } from "./nav-logo";
 import { cn } from "@/lib/utils";
+
+import { Logo, LogoWithText } from "@/components/public/logo";
+import Link from "next/link";
 
 const data = {
   user: {
@@ -44,12 +38,8 @@ export default function CustomSidebar({
 
   return (
     <Sidebar collapsible="icon" {...props}>
-      <SidebarHeader
-        className={cn(sidebar.state === "collapsed" && "flex items-center")}
-      >
-        <h1 className="text-xl font-semibold">
-          {sidebar.state === "collapsed" ? "S" : "SnipSave"}
-        </h1>
+      <SidebarHeader>
+        <NavLogo />
       </SidebarHeader>
       <SidebarContent></SidebarContent>
       <SidebarFooter>

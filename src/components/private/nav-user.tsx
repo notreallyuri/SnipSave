@@ -23,6 +23,7 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
+import Link from "next/link";
 
 export function NavUser({
   user,
@@ -84,10 +85,12 @@ export function NavUser({
                 <User className="mr-1 h-4 w-4" />
                 <span>Profile</span>
               </DropdownMenuItem>
-              <DropdownMenuItem>
-                <Settings className="mr-1 h-4 w-4" />
-                <span>Settings</span>
-              </DropdownMenuItem>
+              <Link href={"/settings"}>
+                <DropdownMenuItem>
+                  <Settings className="mr-1 h-4 w-4" />
+                  <span>Settings</span>
+                </DropdownMenuItem>
+              </Link>
               <DropdownMenuItem>
                 <CreditCard className="mr-1 h-4 w-4" />
                 <span>Billing</span>

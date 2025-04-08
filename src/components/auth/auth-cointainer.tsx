@@ -1,9 +1,19 @@
 "use client";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useSearchParams, useRouter } from "next/navigation";
 import { SignIn } from "./signin";
 import { SignUp } from "./signup";
+import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faGithub, faGoogle } from "@fortawesome/free-brands-svg-icons";
 
 export default function AuthContainer() {
   const router = useRouter();
@@ -40,6 +50,18 @@ export default function AuthContainer() {
           <CardContent>
             <SignIn />
           </CardContent>
+          <Separator />
+          <CardFooter className="flex-col gap-4">
+            <Button className="w-full" variant={"outline"}>
+              Sign in with Github
+              <FontAwesomeIcon icon={faGithub} />
+            </Button>
+            <Separator />
+            <Button className="w-full" variant={"outline"}>
+              Sign in with Google
+              <FontAwesomeIcon icon={faGoogle} />
+            </Button>
+          </CardFooter>
         </Card>
       </TabsContent>
     </Tabs>

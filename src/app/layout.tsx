@@ -1,6 +1,6 @@
 import { Inter } from "next/font/google";
-import { ThemeProvider } from "@/components/public/theme-provider";
-import { ThemeToggle } from "@/components/public/theme-toggle";
+import { ThemeProvider } from "@/components/providers/theme-provider";
+import { AuthProvider } from "@/components/providers/auth-provider";
 import { Toaster } from "@/components/ui/sonner";
 import { Metadata } from "next";
 import React from "react";
@@ -34,18 +34,17 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${inter.className}  antialiased bg-white dark:bg-neutral-950`}
-      >
+      <body className={`${inter.className} bg-white antialiased dark:bg-black`}>
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
           enableSystem
           disableTransitionOnChange
         >
-          <ThemeToggle />
-          {children}
-          <Toaster />
+          <AuthProvider>
+            {children}
+            <Toaster />
+          </AuthProvider>
         </ThemeProvider>
       </body>
     </html>
