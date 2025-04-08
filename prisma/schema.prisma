@@ -64,10 +64,19 @@ model VerificationRequest {
 }
 
 model UserPreferences {
-  id            String  @id @default(cuid())
-  userId        String  @unique
-  language      String  @default("en")
-  notifications Boolean @default(true)
+  id                       String  @id @default(cuid())
+  userId                   String  @unique
+  language                 String  @default("en")
+  themePreference          String  @default("system")
+  editorTheme              String  @default("default")
+  notifications            Boolean @default(true)
+  defaultCodeLanguage      String  @default("typescript")
+  autosave                 Boolean @default(true)
+  lineNumbers              Boolean @default(true)
+  showWelcomeTips          Boolean @default(true)
+  defaultSnippetVisibility String  @default("public")
+  editorFontSize           Int     @default(13)
+  keyboardShortcuts        Boolean @default(true)
 
   user User @relation(fields: [userId], references: [id])
 }
