@@ -9,6 +9,7 @@ datasource db {
 
 model User {
   id            String    @id @default(uuid())
+  avatar        String
   name          String
   email         String    @unique
   password      String
@@ -17,10 +18,10 @@ model User {
 }
 
 model Tags {
-  id        String   @id @default(uuid())
-  name      String   @unique
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id        String    @id @default(uuid())
+  name      String    @unique
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
   snippets  Snippet[]
 }
 
