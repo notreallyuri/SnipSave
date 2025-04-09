@@ -7,6 +7,57 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum Language {
+  en
+  es
+  fr
+  de
+  pt
+  ja
+  zh
+}
+
+enum ThemePreference {
+  light
+  dark
+  system
+}
+
+enum CodeLanguage {
+  javascript
+  typescript
+  python
+  go
+  rust
+  html
+  css
+  cpp
+  java
+  sql
+  json
+  markdown
+}
+
+enum EditorTheme {
+  dracula
+  monokai
+  solarized_light
+  solarized_dark
+  github_light
+  github_dark
+  nord
+  night_owl
+  catppuccin_latte
+  catppuccin_frappe
+  catppuccin_macchiato
+  catppuccin_mocha
+}
+
+enum SnippetVisibility {
+  public
+  private
+}
+
 model Account {
   id                String   @id @default(cuid())
   userId            String
@@ -27,29 +78,30 @@ model Account {
   @@unique([provider, providerAccountId])
 }
 
-model Session {
-  id           String   @id @default(cuid())
-  userId       String
-  expires      DateTime
-  sessionToken String   @unique
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
-  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+model LoginHistory {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  ip        String?
+  userAgent String?
+  location  String?
+  createdAt DateTime @default(now())
 }
 
 model User {
   id            String           @id @default(cuid())
-  name          String?
+  username      String?
   email         String?          @unique
+  salt          String
   emailVerified DateTime?
   image         String?
   createdAt     DateTime         @default(now())
   updatedAt     DateTime         @updatedAt
   accounts      Account[]
-  sessions      Session[]
+  loginHistory  LoginHistory[]
   preferences   UserPreferences?
   snippets      Snippet[]
-  password      String?
+  password      String
 }
 
 model VerificationRequest {
@@ -64,19 +116,19 @@ model VerificationRequest {
 }
 
 model UserPreferences {
-  id                       String  @id @default(cuid())
-  userId                   String  @unique
-  language                 String  @default("en")
-  themePreference          String  @default("system")
-  editorTheme              String  @default("default")
-  notifications            Boolean @default(true)
-  defaultCodeLanguage      String  @default("typescript")
-  autosave                 Boolean @default(true)
-  lineNumbers              Boolean @default(true)
-  showWelcomeTips          Boolean @default(true)
-  defaultSnippetVisibility String  @default("public")
-  editorFontSize           Int     @default(13)
-  keyboardShortcuts        Boolean @default(true)
+  id                       String            @id @default(cuid())
+  userId                   String            @unique
+  language                 Language          @default(en)
+  themePreference          ThemePreference   @default(system)
+  editorTheme              EditorTheme       @default(catppuccin_latte)
+  notifications            Boolean           @default(true)
+  defaultCodeLanguage      CodeLanguage      @default(typescript)
+  autosave                 Boolean           @default(true)
+  lineNumbers              Boolean           @default(true)
+  showWelcomeTips          Boolean           @default(true)
+  defaultSnippetVisibility SnippetVisibility @default(public)
+  editorFontSize           Int               @default(13)
+  keyboardShortcuts        Boolean           @default(true)
 
   user User @relation(fields: [userId], references: [id])
 }

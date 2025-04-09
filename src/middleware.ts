@@ -18,30 +18,30 @@ const routes: Route[] = [
 ];
 
 export function middleware(req: NextRequest) {
-  const path = req.nextUrl.pathname;
-  const route = routes
-    .sort((a, b) => b.ref.length - a.ref.length)
-    .find((route) => path === route.ref || path.startsWith(`${route.ref}/`));
+  // const path = req.nextUrl.pathname;
+  // const route = routes
+  //   .sort((a, b) => b.ref.length - a.ref.length)
+  //   .find((route) => path === route.ref || path.startsWith(`${route.ref}/`));
 
-  const sessionToken =
-    req.cookies.get("__Secure-next-auth.session-token")?.value || // HTTPS
-    req.cookies.get("next-auth.session-token")?.value || // HTTP
-    null;
-  const isLoggedIn = !!sessionToken;
+  // const sessionToken =
+  //   req.cookies.get("__Secure-next-auth.session-token")?.value || // HTTPS
+  //   req.cookies.get("next-auth.session-token")?.value || // HTTP
+  //   null;
+  // const isLoggedIn = !!sessionToken;
 
-  if (!route) {
-    return NextResponse.next();
-  }
+  // if (!route) {
+  //   return NextResponse.next();
+  // }
 
-  const { type, redirect } = route;
+  // const { type, redirect } = route;
 
-  if (type === "private" && !isLoggedIn) {
-    return NextResponse.redirect(new URL("/auth", req.url));
-  }
+  // if (type === "private" && !isLoggedIn) {
+  //   return NextResponse.redirect(new URL("/auth", req.url));
+  // }
 
-  if (isLoggedIn && type === "public" && redirect) {
-    return NextResponse.redirect(new URL("/home", req.url));
-  }
+  // if (isLoggedIn && type === "public" && redirect) {
+  //   return NextResponse.redirect(new URL("/home", req.url));
+  // }
 
   return NextResponse.next();
 }

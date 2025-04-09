@@ -1,6 +1,6 @@
 import { Inter } from "next/font/google";
 import { ThemeProvider } from "@/components/providers/theme-provider";
-import { AuthProvider } from "@/components/providers/auth-provider";
+import { QueryProvider } from "@/components/providers/query-provider";
 import { Toaster } from "@/components/ui/sonner";
 import { Metadata } from "next";
 import React from "react";
@@ -10,19 +10,6 @@ export const metadata: Metadata = {
   title: "SnipSave",
   description:
     "A lightweight app to save, tag, and search your favorite code snippets. Think of it like your personal snippet manager, but cleaner and faster than using Notion or VS Code gists.",
-  icons: {
-    icon: "/favicon.ico",
-    shortcut: "/favicon.ico",
-    apple: "/apple-touch-icon.png",
-  },
-  keywords: [
-    "Next.js",
-    "Tailwind CSS",
-    "TypeScript",
-    "Radix UI",
-    "Shadcn UI",
-    "Starter Template",
-  ],
 };
 
 const inter = Inter({ subsets: ["latin"] });
@@ -34,19 +21,19 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={inter.className}>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          <AuthProvider>
+      <QueryProvider>
+        <body className={`${inter.className} `}>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
             {children}
             <Toaster />
-          </AuthProvider>
-        </ThemeProvider>
-      </body>
+          </ThemeProvider>
+        </body>
+      </QueryProvider>
     </html>
   );
 }

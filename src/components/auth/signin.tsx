@@ -11,43 +11,26 @@ import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { signInSchema } from "@/models/auth.schemas";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
-import { signIn } from "next-auth/react";
 import { toast } from "sonner";
 import { z } from "zod";
 
 export function SignIn() {
-  const loginSchema = z.object({
-    email: z.string().email(),
-    password: z.string().min(8, "Password must be at least 8 characters long"),
-  });
   const router = useRouter();
 
-  type LoginSchema = z.infer<typeof loginSchema>;
+  type LoginSchema = z.infer<typeof signInSchema>;
 
   const form = useForm<LoginSchema>({
-    resolver: zodResolver(loginSchema),
+    resolver: zodResolver(signInSchema),
     defaultValues: {
       email: "",
       password: "",
     },
   });
 
-  const onSubmit = async (data: LoginSchema) => {
-    const res = await signIn("credentials", {
-      email: data.email,
-      password: data.password,
-      redirect: false,
-    });
-
-    if (res?.ok) {
-      toast.success("Sign in successful!");
-      router.push("/dashboard");
-    } else {
-      toast.error("Something went wrong", { description: res?.error });
-    }
-  };
+  const onSubmit = async (data: LoginSchema) => {};
 
   return (
     <Form {...form}>
@@ -78,7 +61,10 @@ export function SignIn() {
             </FormItem>
           )}
         />
-        <Button type="submit" className="w-full cursor-pointer">
+        <Button
+          type="submit"
+          className="w-full cursor-pointer bg-emerald-500 text-white hover:bg-emerald-400"
+        >
           Enter
         </Button>
       </form>

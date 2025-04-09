@@ -4,56 +4,99 @@ import {
   SidebarContent,
   SidebarFooter,
   SidebarHeader,
-  SidebarMenuItem,
   SidebarRail,
-  useSidebar,
 } from "@/components/ui/sidebar";
 
-import { BookOpen, PieChart, Settings2 } from "lucide-react";
-import { useSession } from "next-auth/react";
-import React from "react";
+import { SquareTerminal } from "lucide-react";
+
+import { BookOpen, Settings2 } from "lucide-react";
 import { NavUser } from "./nav-user";
 import { NavLogo } from "./nav-logo";
-import { cn } from "@/lib/utils";
+import { NavMain } from "./nav-main";
+import React from "react";
 
 const data = {
-  user: {
-    avatar:
-      "https://w7zsywbg33.ufs.sh/f/Z6zpkKlEBO2RGSm7Si4S9AU6jiBfT3EMqnCKuxGcgleHNLkv",
-    name: "Yuri",
-    email: "test@example.com",
-  },
   navMain: [
-    { title: "Dashboard", icon: PieChart },
-    { title: "Documentation", icon: BookOpen },
-    { title: "Settings", icon: Settings2 },
+    {
+      title: "Dashboard",
+      url: "/dashboard",
+      icon: SquareTerminal,
+      isActive: true,
+      items: [
+        {
+          title: "General",
+          url: "/dashboard",
+        },
+        {
+          title: "Starred",
+          url: "#",
+        },
+      ],
+    },
+    {
+      title: "Documentation",
+      url: "#",
+      icon: BookOpen,
+      items: [
+        {
+          title: "Introduction",
+          url: "#",
+        },
+        {
+          title: "Get Started",
+          url: "#",
+        },
+        {
+          title: "Tutorials",
+          url: "#",
+        },
+        {
+          title: "Changelog",
+          url: "#",
+        },
+      ],
+    },
+    {
+      title: "Settings",
+      url: "/settings",
+      icon: Settings2,
+      items: [
+        {
+          title: "General",
+          url: "/settings/general",
+        },
+        {
+          title: "Account",
+          url: "/settings/account",
+        },
+      ],
+    },
   ],
 };
 
 export default function CustomSidebar({
   ...props
 }: React.ComponentProps<typeof Sidebar>) {
-  const sidebar = useSidebar();
-  const { data: session, status } = useSession();
-
-  if (status === "loading") {
-    return null;
-  }
-
-  const user = session?.user;
+  const user = {
+    image: "",
+    name: "Yuri",
+    email: "example@mail.com",
+  };
 
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
         <NavLogo />
       </SidebarHeader>
-      <SidebarContent></SidebarContent>
+      <SidebarContent>
+        <NavMain items={data.navMain} />
+      </SidebarContent>
       <SidebarFooter>
         <NavUser
           user={{
             image: user?.image ?? "",
             name: user?.name ?? "User",
-            email: user?.email ?? "",
+            email: user?.email ?? "radom",
           }}
         />
       </SidebarFooter>

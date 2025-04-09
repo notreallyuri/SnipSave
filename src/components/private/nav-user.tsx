@@ -24,7 +24,6 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 import Link from "next/link";
-import { signOut } from "next-auth/react";
 import React from "react";
 import { SettingsDialog } from "./dialog-preferences";
 
@@ -68,7 +67,9 @@ export function NavUser({
               <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                 <Avatar className="h-8 w-8 rounded-lg">
                   <AvatarImage src={user.image} alt={user.name} />
-                  <AvatarFallback className="rounded-lg">CN</AvatarFallback>
+                  <AvatarFallback className="rounded-lg">
+                    {user.name?.charAt(0).toUpperCase() || "CN"}
+                  </AvatarFallback>
                 </Avatar>
                 <div className="grid flex-1 text-left text-sm leading-tight">
                   <span className="truncate font-semibold">{user.name}</span>
@@ -99,10 +100,7 @@ export function NavUser({
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem
-              onClick={() => signOut({ callbackUrl: "/" })}
-              className="cursor-pointer"
-            >
+            <DropdownMenuItem className="cursor-pointer">
               <LogOut className="mr-1 h-4 w-4" />
               <span>Sign Out</span>
             </DropdownMenuItem>

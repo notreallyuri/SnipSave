@@ -1,39 +1,24 @@
-import { NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
-import bcrypt from "bcrypt";
+import { signUpSchema } from "@/models/auth.schemas";
+import { authManager } from "@/repository/auth.repository";
+import { NextRequest, NextResponse } from "next/server";
+import { cookies } from "next/headers";
+import { AppError } from "@/lib/errors";
 
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
+  const body = await req.json();
+
   try {
-    const body = await req.json();
-    const { name, email, password } = body;
+    await authManager.create(body);
 
-    const existingUser = await prisma.user.findUnique({ where: { email } });
-    if (existingUser)
+    return NextResponse.json({ success: true }, { status: 201 });
+  } catch (err) {
+    if (err instanceof AppError) {
       return NextResponse.json(
-        { error: "User already exists" },
-        { status: 400 },
+        { error: err.message, issues: err.meta },
+        { status: err.httpStatus },
       );
+    }
 
-    const hash = await bcrypt.hash(password, 10);
-
-    const user = await prisma.user.create({
-      data: {
-        name,
-        email,
-        password: hash,
-      },
-    });
-
-    await prisma.userPreferences.create({
-      data: { userId: user.id },
-    });
-
-    return NextResponse.json(
-      { message: "User created successfully" },
-      { status: 201 },
-    );
-  } catch (error) {
-    console.error("Error creating user:", error);
     return NextResponse.json(
       { error: "Internal Server Error" },
       { status: 500 },

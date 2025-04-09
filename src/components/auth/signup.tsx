@@ -11,29 +11,14 @@ import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter } from "next/navigation";
+import { signUpSchema } from "@/models/auth.schemas";
+import { redirect, useRouter } from "next/navigation";
+import { signUp } from "@/services/auth-service";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { NextResponse } from "next/server";
 import { z } from "zod";
 
 export function SignUp() {
-  const signUpSchema = z
-    .object({
-      username: z
-        .string()
-        .min(3, "Username must be at least 3 characters")
-        .max(20, "Username must be at most 20 characters"),
-      email: z.string().email(),
-      password: z.string().min(8, "Password must be at least 8 characters"),
-      confirmPassword: z.string(),
-    })
-    .refine((data) => data.password === data.confirmPassword, {
-      message: "Passwords don't match",
-      path: ["confirmPassword"],
-    });
-
-  const router = useRouter();
 
   type SignUpSchema = z.infer<typeof signUpSchema>;
 
@@ -48,24 +33,24 @@ export function SignUp() {
   });
 
   const onSubmit = async (data: SignUpSchema) => {
-    const res = await fetch("/api/auth/signup", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        name: data.username,
-        email: data.email,
-        password: data.password,
-      }),
-    });
+    try {
+      const res = await fetch("/api/auth/signup", {
+        method: "POST",
+        body: JSON.stringify(data),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
 
-    if (res.ok) {
-      toast.success("Sign up successful!");
-      router.push("/");
-    } else {
-      const errorData = await res.json();
-      toast.error(errorData.error || "Something went wrong");
+      if (!res.ok) {
+        const err = await res.json();
+        toast.error(err.error || "Sign up failed");
+        return;
+      }
+
+      redirect("/home")
+    } catch (err: any) {
+      toast.error(err.message || "Something went wrong");
     }
   };
 
@@ -124,7 +109,10 @@ export function SignUp() {
             </FormItem>
           )}
         />
-        <Button className="w-full cursor-pointer" type="submit">
+        <Button
+          className="w-full cursor-pointer bg-emerald-500 text-white hover:bg-emerald-400"
+          type="submit"
+        >
           Create
         </Button>
       </form>

@@ -13,7 +13,6 @@ import { SignUp } from "./signup";
 import { Button } from "@/components/ui/button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGithub, faGoogle } from "@fortawesome/free-brands-svg-icons";
-import { signIn } from "next-auth/react";
 
 export default function AuthContainer() {
   const router = useRouter();
@@ -59,10 +58,9 @@ export default function AuthContainer() {
             or
             <div className="h-0.25 w-30 bg-black/25 dark:bg-white/50" />
           </div>
-          <CardFooter className="grid grid-cols-2 gap-6">
+          <CardFooter className="grid grid-cols-2 gap-6 text-emerald-500 dark:text-emerald-300">
             <Button
-              className="w-full cursor-pointer"
-              onClick={() => signIn("github")}
+              className="w-full cursor-pointer hover:text-emerald-400 dark:hover:text-emerald-200"
               variant={"outline"}
             >
               <FontAwesomeIcon icon={faGithub} className="text-lg" />
@@ -70,8 +68,7 @@ export default function AuthContainer() {
             </Button>
 
             <Button
-              className="w-full cursor-pointer"
-              onClick={() => signIn("google")}
+              className="w-full cursor-pointer hover:text-emerald-400 dark:hover:text-emerald-200"
               variant={"outline"}
             >
               <FontAwesomeIcon icon={faGoogle} className="text-lg" />

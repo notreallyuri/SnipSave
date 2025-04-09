@@ -5,12 +5,11 @@ import { ThemeToggle } from "@/components/public/theme-toggle";
 
 import { metadata } from "./layout";
 
-metadata.title = "SnipSave"
+metadata.title = "SnipSave";
 
 export default function Home() {
   return (
     <>
-      <ThemeToggle absolute />
       <Nav />
     </>
   );
