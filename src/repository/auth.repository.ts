@@ -1,6 +1,6 @@
 import { signInSchema, signUpSchema } from "@/schemas/auth.schemas";
 import { PrismaClient } from "@prisma/client";
-import { utility } from "@/services/utility";
+import { customHasher } from "@/lib/utils";
 import { AppError } from "@/lib/errors";
 import { cookies } from "next/headers";
 import { sessionManager } from "./session.repository";
@@ -19,8 +19,8 @@ class AuthRepository {
       throw new AppError({ code: "CONFLICT", message: "Email already in use" });
 
     try {
-      const salt = utility.generateSalt();
-      const hash = await utility.hashPassword(password, salt);
+      const salt = customHasher.generateSalt();
+      const hash = await customHasher.hashPassword(password, salt);
 
       const user = await this.db.user.create({
         data: {
@@ -59,7 +59,7 @@ class AuthRepository {
 
     const { password: hashedPassword, salt } = user;
 
-    const isValid = await utility.verifyPassword(
+    const isValid = await customHasher.verifyPassword(
       password,
       salt,
       hashedPassword,
