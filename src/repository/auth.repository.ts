@@ -1,4 +1,4 @@
-import { signInSchema, signUpSchema } from "@/models/auth.schemas";
+import { signInSchema, signUpSchema } from "@/schemas/auth.schemas";
 import { PrismaClient } from "@prisma/client";
 import { utility } from "@/services/utility";
 import { AppError } from "@/lib/errors";

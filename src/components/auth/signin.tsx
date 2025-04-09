@@ -11,7 +11,7 @@ import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { signInSchema } from "@/models/auth.schemas";
+import { signInSchema } from "@/schemas/auth.schemas";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
