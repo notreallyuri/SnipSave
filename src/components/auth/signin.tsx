@@ -30,7 +30,21 @@ export function SignIn() {
     },
   });
 
-  const onSubmit = async (data: LoginSchema) => {};
+  const onSubmit = async (data: LoginSchema) => {
+    try {
+      const res = await fetch("/api/auth/signin", {
+        method: "POST",
+        body: JSON.stringify(data),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      router.push("/home");
+    } catch (error: any) {
+      toast.error(error.message || "Something went wrong");
+    }
+  };
 
   return (
     <Form {...form}>

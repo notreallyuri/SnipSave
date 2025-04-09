@@ -12,13 +12,13 @@ import { Button } from "../ui/button";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { signUpSchema } from "@/models/auth.schemas";
-import { redirect, useRouter } from "next/navigation";
-import { signUp } from "@/services/auth-service";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 
 export function SignUp() {
+  const router = useRouter();
 
   type SignUpSchema = z.infer<typeof signUpSchema>;
 
@@ -48,7 +48,7 @@ export function SignUp() {
         return;
       }
 
-      redirect("/home")
+      router.push("/home");
     } catch (err: any) {
       toast.error(err.message || "Something went wrong");
     }

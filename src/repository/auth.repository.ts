@@ -7,7 +7,7 @@ import { sessionManager } from "./session.repository";
 import { prisma } from "@/lib/prisma";
 import { z } from "zod";
 
-export class AuthRepository {
+class AuthRepository {
   constructor(private readonly db: PrismaClient) {}
 
   async create(data: z.infer<typeof signUpSchema>) {
@@ -23,10 +23,16 @@ export class AuthRepository {
       const hash = await utility.hashPassword(password, salt);
 
       const user = await this.db.user.create({
-        data: { username, email, password: hash, salt },
+        data: {
+          username,
+          email,
+          password: hash,
+          salt,
+          preferences: { create: {} },
+        },
       });
 
-      sessionManager.createUserSession(user.id, await cookies());
+      await sessionManager.createUserSession(user.id, await cookies());
     } catch (error) {
       if (error instanceof AppError) throw error;
       throw new AppError({

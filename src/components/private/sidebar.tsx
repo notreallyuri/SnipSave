@@ -14,6 +14,8 @@ import { NavUser } from "./nav-user";
 import { NavLogo } from "./nav-logo";
 import { NavMain } from "./nav-main";
 import React from "react";
+import { AppError } from "@/lib/errors";
+import { useRouter } from "next/navigation";
 
 const data = {
   navMain: [
@@ -77,11 +79,51 @@ const data = {
 export default function CustomSidebar({
   ...props
 }: React.ComponentProps<typeof Sidebar>) {
-  const user = {
+  const [user, setUser] = React.useState({
     image: "",
     name: "Yuri",
     email: "example@mail.com",
-  };
+  });
+
+  const router = useRouter();
+
+  async function getUser() {
+    const res = await fetch("/api/user", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!res.ok) {
+      console.log(res.status, res.statusText);
+      router.push("/auth?tab=signin");
+    }
+
+    return res;
+  }
+
+  React.useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const userRes = await getUser();
+        const userData = await userRes.json();
+        setUser({
+          image: userData.user?.image ?? "",
+          name: userData.user?.username ?? "User",
+          email: userData.user?.email ?? "random",
+        });
+      } catch (error) {
+        if (error instanceof AppError && error.code === "UNAUTHORIZED") {
+          router.push("/login");
+        } else {
+          console.error("Error fetching user data:", error);
+        }
+      }
+    };
+
+    fetchUserData();
+  }, []);
 
   return (
     <Sidebar collapsible="icon" {...props}>

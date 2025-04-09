@@ -23,7 +23,7 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 import React from "react";
 import { SettingsDialog } from "./dialog-preferences";
 
@@ -34,6 +34,22 @@ export function NavUser({
 }) {
   const { isMobile } = useSidebar();
   const [dialogOpen, setDialogOpen] = React.useState(false);
+  const router = useRouter();
+
+  async function signOut() {
+    const res = await fetch("/api/auth/signout", {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!res.ok) {
+      console.log(res.status, res.statusText);
+    }
+
+    router.push("/auth?tab=signin");
+  }
 
   return (
     <SidebarMenu>
@@ -100,7 +116,7 @@ export function NavUser({
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem className="cursor-pointer">
+            <DropdownMenuItem onClick={signOut} className="cursor-pointer">
               <LogOut className="mr-1 h-4 w-4" />
               <span>Sign Out</span>
             </DropdownMenuItem>
