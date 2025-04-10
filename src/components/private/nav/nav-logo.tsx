@@ -1,6 +1,6 @@
 import Link from "next/link";
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
-import { SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "../ui/sidebar";
+import { Avatar, AvatarFallback, AvatarImage } from "../../ui/avatar";
+import { SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "../../ui/sidebar";
 
 export function NavLogo() {
   return (

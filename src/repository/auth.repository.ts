@@ -5,6 +5,7 @@ import { AppError } from "@/lib/errors";
 import { cookies } from "next/headers";
 import { sessionManager } from "./session.repository";
 import { prisma } from "@/lib/prisma";
+import crypto from "crypto";
 import { z } from "zod";
 
 class AuthRepository {
@@ -29,6 +30,17 @@ class AuthRepository {
           password: hash,
           salt,
           preferences: { create: {} },
+        },
+      });
+
+      const verificationToken = crypto.randomBytes(32).toString("hex");
+
+      await this.db.emailVerificationToken.create({
+        data: {
+          userId: user.id,
+          email: user.email,
+          token: verificationToken,
+          expiresAt: new Date(Date.now() + 60 * 60 * 1000),
         },
       });
 
@@ -62,7 +74,7 @@ class AuthRepository {
     const isValid = await customHasher.verifyPassword(
       password,
       salt,
-      hashedPassword,
+      hashedPassword
     );
 
     if (!isValid)

@@ -5,13 +5,13 @@ import { cookies } from "next/headers";
 
 export async function DELETE(req: NextRequest) {
   try {
-    const sessionData = await sessionManager.getUserSession(await cookies());
+    const sessionData = await sessionManager.getUserId(await cookies());
 
     if (!sessionData) {
       return NextResponse.json({ error: "Session not found" }, { status: 401 });
     }
 
-    await sessionManager.removeUserFromSession(await cookies());
+    await sessionManager.deleteSession(await cookies());
 
     return NextResponse.json({ message: "Successfully signed out" });
   } catch (err) {

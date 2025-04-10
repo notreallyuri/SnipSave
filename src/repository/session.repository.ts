@@ -35,7 +35,7 @@ class SessionRepository {
     });
   }
 
-  async getUserSession(cookies: Pick<Cookies, "get">) {
+  async getUserId(cookies: Pick<Cookies, "get">) {
     const sessionId = cookies.get(COOKIE_SESSION_KEY)?.value;
     console.log("Session ID from cookie:", sessionId);
 
@@ -64,7 +64,7 @@ class SessionRepository {
     this.setCookies(sessionToken, cookies);
   }
 
-  async removeUserFromSession(cookies: Pick<Cookies, "get" | "delete">) {
+  async deleteSession(cookies: Pick<Cookies, "get" | "delete">) {
     const sessionId = cookies.get(COOKIE_SESSION_KEY)?.value;
 
     if (!sessionId) return null;

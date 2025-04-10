@@ -23,32 +23,31 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
-import { useRouter } from "next/navigation";
 import React from "react";
 import { SettingsDialog } from "./dialog-preferences";
+import { useGetUser } from "@/hooks/fetch/use-user";
+import { Skeleton } from "@/components/ui/skeleton";
 
-export function NavUser({
-  user,
-}: {
-  user: { name: string; email: string; image: string };
-}) {
+export function NavUser() {
   const { isMobile } = useSidebar();
   const [dialogOpen, setDialogOpen] = React.useState(false);
-  const router = useRouter();
 
-  async function signOut() {
-    const res = await fetch("/api/auth/signout", {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+  const { data: user, isLoading } = useGetUser();
 
-    if (!res.ok) {
-      console.log(res.status, res.statusText);
-    }
-
-    router.push("/auth?tab=signin");
+  if (isLoading || !user) {
+    return (
+      <SidebarMenu>
+        <SidebarMenuItem>
+          <SidebarMenuButton size="lg">
+            <Skeleton className="h-8 w-8 rounded-lg" />
+            <div className="grid flex-1 space-y-1 pl-3">
+              <Skeleton className="h-4 w-32" />
+              <Skeleton className="h-3 w-24" />
+            </div>
+          </SidebarMenuButton>
+        </SidebarMenuItem>
+      </SidebarMenu>
+    );
   }
 
   return (
@@ -63,7 +62,7 @@ export function NavUser({
               <Avatar className="size-8 rounded-lg">
                 <AvatarImage src={user.image} alt={user.name} />
                 <AvatarFallback className="rounded-lg">
-                  {user.name?.charAt(0).toUpperCase() || "CN"}
+                  {user.name?.charAt(0).toUpperCase() || ""}
                 </AvatarFallback>
               </Avatar>
               <div className="grid flex-1 text-left text-sm leading-tight">
@@ -116,7 +115,7 @@ export function NavUser({
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={signOut} className="cursor-pointer">
+            <DropdownMenuItem className="cursor-pointer">
               <LogOut className="mr-1 h-4 w-4" />
               <span>Sign Out</span>
             </DropdownMenuItem>

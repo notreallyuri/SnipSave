@@ -69,7 +69,7 @@ model Account {
   expires_at        Int?
   token_type        String?
   scope             String?
-  id_token          String?  @db.Text
+  id_token          String?
   session_state     String?
   createdAt         DateTime @default(now())
   updatedAt         DateTime @updatedAt
@@ -89,30 +89,35 @@ model LoginHistory {
 }
 
 model User {
-  id            String           @id @default(cuid())
-  username      String?
-  email         String?          @unique
-  salt          String
-  emailVerified DateTime?
-  image         String?
-  createdAt     DateTime         @default(now())
-  updatedAt     DateTime         @updatedAt
-  accounts      Account[]
-  loginHistory  LoginHistory[]
-  preferences   UserPreferences?
-  snippets      Snippet[]
-  password      String
+  id                     String                   @id @default(cuid())
+  username               String?
+  email                  String                   @unique
+  salt                   String
+  emailVerified          DateTime?
+  image                  String?
+  createdAt              DateTime                 @default(now())
+  updatedAt              DateTime                 @updatedAt
+  accounts               Account[]
+  loginHistory           LoginHistory[]
+  preferences            UserPreferences?
+  snippets               Snippet[]
+  password               String
+  EmailVerificationToken EmailVerificationToken[]
 }
 
-model VerificationRequest {
-  id         String   @id @default(cuid())
-  identifier String
-  token      String   @unique
-  expires    DateTime
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+model EmailVerificationToken {
+  id     String @id @default(cuid())
+  userId String
+  email  String
+  token  String @unique
 
-  @@unique([identifier, token])
+  verifiedAt DateTime?
+  expiresAt  DateTime
+  createdAt  DateTime  @default(now())
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@unique([userId, token])
 }
 
 model UserPreferences {
@@ -134,28 +139,27 @@ model UserPreferences {
 }
 
 model Tags {
-  id        String    @id @default(cuid())
+  id String @id @default(cuid())
+
   name      String    @unique
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   snippets  Snippet[]
 }
 
-model Token {
-  id        String   @id @default(cuid())
-  token     String   @unique
-  createdAt DateTime @default(now())
-  expiresAt DateTime
-  email     String   @unique
-}
-
 model Snippet {
-  id        String   @id @default(cuid())
-  title     String
-  content   String   @db.VarChar(500)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  userId    String
-  user      User     @relation(fields: [userId], references: [id])
-  tags      Tags[]
+  id String @id @default(cuid())
+
+  title       String
+  description String?
+  content     String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  language   CodeLanguage
+  visibility SnippetVisibility @default(public)
+  tags       Tags[]
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
 }
