@@ -25,14 +25,16 @@ import {
 } from "@/components/ui/sidebar";
 import React from "react";
 import { SettingsDialog } from "./dialog-preferences";
-import { useGetUser } from "@/hooks/fetch/use-user";
+import { useGetBaseUserData, useSignOut } from "@/hooks/fetch";
 import { Skeleton } from "@/components/ui/skeleton";
 
 export function NavUser() {
   const { isMobile } = useSidebar();
   const [dialogOpen, setDialogOpen] = React.useState(false);
 
-  const { data: user, isLoading } = useGetUser();
+  const { data: user, isLoading } = useGetBaseUserData();
+
+  const { mutate } = useSignOut();
 
   if (isLoading || !user) {
     return (
@@ -60,13 +62,16 @@ export function NavUser() {
               className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
             >
               <Avatar className="size-8 rounded-lg">
-                <AvatarImage src={user.image} alt={user.name} />
+                <AvatarImage
+                  src={user?.image ?? undefined}
+                  alt={user.username}
+                />
                 <AvatarFallback className="rounded-lg">
-                  {user.name?.charAt(0).toUpperCase() || ""}
+                  {user.username?.charAt(0).toUpperCase() || ""}
                 </AvatarFallback>
               </Avatar>
               <div className="grid flex-1 text-left text-sm leading-tight">
-                <span className="truncate font-semibold">{user.name}</span>
+                <span className="truncate font-semibold">{user.username}</span>
                 <span className="truncate text-xs">{user.email}</span>
               </div>
               <ChevronsUpDown className="ml-auto size-4" />
@@ -81,13 +86,18 @@ export function NavUser() {
             <DropdownMenuLabel className="p-0 font-normal">
               <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                 <Avatar className="h-8 w-8 rounded-lg">
-                  <AvatarImage src={user.image} alt={user.name} />
+                  <AvatarImage
+                    src={user?.image ?? undefined}
+                    alt={user.username}
+                  />
                   <AvatarFallback className="rounded-lg">
-                    {user.name?.charAt(0).toUpperCase() || "CN"}
+                    {user.username?.charAt(0).toUpperCase() || "CN"}
                   </AvatarFallback>
                 </Avatar>
                 <div className="grid flex-1 text-left text-sm leading-tight">
-                  <span className="truncate font-semibold">{user.name}</span>
+                  <span className="truncate font-semibold">
+                    {user.username}
+                  </span>
                   <span className="truncate text-xs">{user.email}</span>
                 </div>
               </div>
@@ -115,7 +125,10 @@ export function NavUser() {
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem className="cursor-pointer">
+            <DropdownMenuItem
+              className="cursor-pointer"
+              onClick={() => mutate()}
+            >
               <LogOut className="mr-1 h-4 w-4" />
               <span>Sign Out</span>
             </DropdownMenuItem>

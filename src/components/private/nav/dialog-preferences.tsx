@@ -26,20 +26,14 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 
-
-import {
-  useGetPreferences,
-  useUpdatePreferences,
-} from "@/hooks/fetch/use-preferences";
+import { useGetPreferences, useUpdatePreferences } from "@/hooks/fetch";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { userPreferencesSchema, type PreferencesType } from "@/schemas";
+import { UserSchema, UserSchemaTypes } from "@/schemas";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 import pref from "@/config/preferences.json";
 import React from "react";
-
-
 
 export function SettingsDialog({
   open,
@@ -52,15 +46,16 @@ export function SettingsDialog({
   const { data, isLoading } = useGetPreferences();
   const { mutate: updatePreferences, isPending } = useUpdatePreferences();
 
-  const preferences: PreferencesType = data?.preferences?.preferences;
+  const preferences: UserSchemaTypes["preferences"] =
+    data?.preferences?.preferences;
 
   React.useEffect(() => {
     console.log("Fetched Data:", data);
     console.log("Extracted Preferences:", preferences);
   }, [data]);
 
-  const form = useForm<z.infer<typeof userPreferencesSchema>>({
-    resolver: zodResolver(userPreferencesSchema),
+  const form = useForm<UserSchemaTypes["preferences"]>({
+    resolver: zodResolver(UserSchema["preferences"]),
     defaultValues: preferences,
     values: preferences,
   });
@@ -80,7 +75,7 @@ export function SettingsDialog({
     snippetVisibilities,
   } = pref;
 
-  const onSubmit = async (data: z.infer<typeof userPreferencesSchema>) => {
+  const onSubmit = async (data: UserSchemaTypes["preferences"]) => {
     updatePreferences(data, {
       onSuccess: () => {
         setTheme(data.themePreference ?? "system");

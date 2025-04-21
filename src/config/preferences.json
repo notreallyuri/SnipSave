@@ -31,7 +31,11 @@
     { "GitHub Light": "github-light" },
     { "GitHub Dark": "github-dark" },
     { "Nord": "nord" },
-    { "Night Owl": "night-owl" }
+    { "Night Owl": "night-owl" },
+    { "Catppuccin Latte": "catppuccin_latte" },
+    { "Catppuccin Macchiato": "catppuccin_macchiato" },
+    { "Catppuccin Mocha": "catppuccin_mocha" },
+    { "Catppuccin Frappuccino": "catppuccin_frappuccino" }
   ],
   "snippetLayouts": [{ "List": "list" }, { "Grid": "grid" }],
   "snippetVisibilities": [{ "Public": "public" }, { "Private": "private" }]

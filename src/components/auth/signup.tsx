@@ -11,19 +11,17 @@ import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { signUpSchema } from "@/schemas/auth.schemas";
+import { UserSchema, UserSchemaTypes } from "@/schemas";
 import { useRouter } from "next/navigation";
+import { useSignUp } from "@/hooks/fetch";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { z } from "zod";
 
 export function SignUp() {
   const router = useRouter();
 
-  type SignUpSchema = z.infer<typeof signUpSchema>;
-
-  const form = useForm<SignUpSchema>({
-    resolver: zodResolver(signUpSchema),
+  const form = useForm<UserSchemaTypes["signUp"]>({
+    resolver: zodResolver(UserSchema["signUp"]),
     defaultValues: {
       username: "",
       email: "",
@@ -32,23 +30,16 @@ export function SignUp() {
     },
   });
 
-  const onSubmit = async (data: SignUpSchema) => {
+  const { mutate } = useSignUp();
+
+  const onSubmit = async (data: UserSchemaTypes["signUp"]) => {
     try {
-      const res = await fetch("/api/auth/signup", {
-        method: "POST",
-        body: JSON.stringify(data),
-        headers: {
-          "Content-Type": "application/json",
+      mutate(data, {
+        onSuccess: () => {
+          toast.success("Account created successfully");
+          router.push("/home");
         },
       });
-
-      if (!res.ok) {
-        const err = await res.json();
-        toast.error(err.error || "Sign up failed");
-        return;
-      }
-
-      router.push("/home");
     } catch (err: any) {
       toast.error(err.message || "Something went wrong");
     }

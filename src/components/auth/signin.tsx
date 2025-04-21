@@ -9,41 +9,36 @@ import {
 } from "../ui/form";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
-
+import { useSignIn } from "@/hooks/fetch";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { signInSchema } from "@/schemas/auth.schemas";
+import { UserSchema, UserSchemaTypes } from "@/schemas";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { z } from "zod";
 
 export function SignIn() {
   const router = useRouter();
 
-  type LoginSchema = z.infer<typeof signInSchema>;
-
-  const form = useForm<LoginSchema>({
-    resolver: zodResolver(signInSchema),
+  const form = useForm<UserSchemaTypes["signIn"]>({
+    resolver: zodResolver(UserSchema["signIn"]),
     defaultValues: {
       email: "",
       password: "",
     },
   });
 
-  const onSubmit = async (data: LoginSchema) => {
-    try {
-      const res = await fetch("/api/auth/signin", {
-        method: "POST",
-        body: JSON.stringify(data),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+  const { mutate } = useSignIn();
 
-      router.push("/home");
-    } catch (error: any) {
-      toast.error(error.message || "Something went wrong");
-    }
+  const onSubmit = async (data: UserSchemaTypes["signIn"]) => {
+    mutate(data, {
+      onSuccess: () => {
+        toast.success("Logged in successfully");
+        router.push("/home");
+      },
+      onError: (error: any) => {
+        toast.error(error.message || "Something went wrong");
+      },
+    });
   };
 
   return (

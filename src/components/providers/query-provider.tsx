@@ -1,5 +1,8 @@
 "use client";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { TRPCProvider } from "@/lib/trpc";
+import { trpc } from "@/lib/trpc-client";
+
 import React from "react";
 
 function makeQueryClient() {
@@ -14,10 +17,8 @@ let browserQueryClient: QueryClient | undefined = undefined;
 
 function getQueryClient() {
   if (typeof window === "undefined") return makeQueryClient();
-  else {
-    if (!browserQueryClient) browserQueryClient = makeQueryClient();
-    return browserQueryClient;
-  }
+  if (!browserQueryClient) browserQueryClient = makeQueryClient();
+  return browserQueryClient;
 }
 
 export function QueryProvider({
@@ -25,9 +26,13 @@ export function QueryProvider({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const queryClient = getQueryClient();
+  const queryClient = React.useMemo(() => getQueryClient(), []);
 
   return (
-    <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+    <QueryClientProvider client={queryClient}>
+      <TRPCProvider trpcClient={trpc} queryClient={queryClient}>
+        {children}
+      </TRPCProvider>
+    </QueryClientProvider>
   );
 }
