@@ -46,8 +46,7 @@ export function SettingsDialog({
   const { data, isLoading } = useGetPreferences();
   const { mutate: updatePreferences, isPending } = useUpdatePreferences();
 
-  const preferences: UserSchemaTypes["preferences"] =
-    data?.preferences?.preferences;
+  const preferences: UserSchemaTypes["preferences"] = data;
 
   React.useEffect(() => {
     console.log("Fetched Data:", data);

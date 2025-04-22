@@ -20,3 +20,13 @@ export function useUpdateUser() {
   const trpc = useTRPC();
   return useMutation(trpc.user.updateUser.mutationOptions());
 }
+
+export function useGetPreferences() {
+  const trpc = useTRPC();
+  return useQuery(trpc.user.getPreferences.queryOptions());
+}
+
+export function useUpdatePreferences() {
+  const trpc = useTRPC();
+  return useMutation(trpc.user.updatePreferences.mutationOptions());
+}

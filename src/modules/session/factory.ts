@@ -12,7 +12,7 @@ const sessionFactory = <T>(
 };
 
 const createSession = sessionFactory(CreateSessionService);
-const getCurrentSession = sessionFactory(GetUserIdService);
+const getUserIdBySession = sessionFactory(GetUserIdService);
 const deleteSession = sessionFactory(DeleteSessionService);
 
-export { createSession, getCurrentSession, deleteSession };
+export { createSession, getUserIdBySession, deleteSession };

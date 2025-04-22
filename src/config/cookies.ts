@@ -14,17 +14,21 @@ export function createCookieShim(req: Request) {
       options: {
         secure?: boolean;
         httpOnly?: boolean;
-        sameSite?: "strict" | "lax";
+        sameSite?: "strict" | "lax" | "none";
         path?: string;
         expires?: Date;
       } = {}
     ) => {
-      const cookie = serialize(key, value, {
+      const isProduction = process.env.NODE_ENV === "production";
+      const cookieOptions = {
         httpOnly: true,
+        secure: isProduction,
+        sameSite: "lax" as "lax",
         path: "/",
-        sameSite: "lax",
         ...options,
-      });
+      };
+
+      const cookie = serialize(key, value, cookieOptions);
       setCookies.push(cookie);
     },
     delete: (key: string) => {
