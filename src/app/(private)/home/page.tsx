@@ -6,14 +6,36 @@ import {
   CardHeader,
   CardDescription,
   CardContent,
-  CardFooter,
 } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
 import { Progress } from "@/components/ui/progress";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { SearchBar } from "@/components/private/search";
+import { DataTable } from "@/components/private/data-table";
 
 metadata.title = "Home | SnipSave";
+
+const mockData = Array.from({ length: 40 }, (_, i) => {
+  const id = (i + 1).toString();
+  const name = `Snippet ${i + 1}`;
+  const languages = [
+    "JavaScript",
+    "TypeScript",
+    "Python",
+    "Go",
+    "Rust",
+    "C++",
+    "C#",
+    "Ruby",
+    "Swift",
+    "Kotlin",
+  ];
+
+  const language = languages[i % languages.length];
+  const createdAt = new Date(2024, 0, 1 + i).toISOString().split("T")[0];
+  const updatedAt = new Date(2024, 0, 5 + i).toISOString().split("T")[0];
+
+  return { id, name, language, createdAt, updatedAt };
+});
 
 export default function Home() {
   return (
@@ -25,7 +47,7 @@ export default function Home() {
         </div>
         <SearchBar />
       </header>
-      <main className="grid w-full grid-cols-1 gap-4 p-4 pt-16 sm:grid-cols-2 lg:grid-cols-4">
+      <main className="grid w-full grid-cols-1 gap-4 p-4 pt-4 sm:grid-cols-2 lg:grid-cols-4">
         <Card className="hover:shadow-lg dark:hover:shadow-emerald-400/20">
           <CardHeader>
             <CardTitle className="text-2xl">Create Snippet</CardTitle>
@@ -75,6 +97,9 @@ export default function Home() {
             />
             <p className="text-muted-foreground text-sm">20%</p>
           </CardContent>
+        </Card>
+        <Card className="transition hover:shadow-lg col-span-1 pt-0 pb-2 lg:col-span-4 gap-0 overflow-hidden rounded-lg dark:hover:shadow-emerald-400/20">
+          <DataTable data={mockData} />
         </Card>
       </main>
     </>

@@ -1,7 +1,5 @@
 "use client";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { TRPCProvider } from "@/lib/trpc";
-import { trpc } from "@/lib/trpc-client";
 
 import React from "react";
 
@@ -30,9 +28,7 @@ export function QueryProvider({
 
   return (
     <QueryClientProvider client={queryClient}>
-      <TRPCProvider trpcClient={trpc} queryClient={queryClient}>
         {children}
-      </TRPCProvider>
     </QueryClientProvider>
   );
 }

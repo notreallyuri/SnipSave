@@ -1,5 +1,5 @@
 -- CreateEnum
-CREATE TYPE "Language" AS ENUM ('en', 'es', 'fr', 'de', 'pt', 'ja', 'zh');
+CREATE TYPE "Language" AS ENUM ('en', 'es', 'fr', 'de', 'pt', 'ja', 'zh', 'ko');
 
 -- CreateEnum
 CREATE TYPE "ThemePreference" AS ENUM ('light', 'dark', 'system');
@@ -48,7 +48,7 @@ CREATE TABLE "LoginHistory" (
 -- CreateTable
 CREATE TABLE "User" (
     "id" TEXT NOT NULL,
-    "username" TEXT,
+    "username" TEXT NOT NULL,
     "email" TEXT NOT NULL,
     "salt" TEXT NOT NULL,
     "emailVerified" TIMESTAMP(3),
@@ -108,10 +108,10 @@ CREATE TABLE "Snippet" (
     "title" TEXT NOT NULL,
     "description" TEXT,
     "content" TEXT NOT NULL,
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" TIMESTAMP(3) NOT NULL,
     "language" "CodeLanguage" NOT NULL,
     "visibility" "SnippetVisibility" NOT NULL DEFAULT 'public',
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
     "userId" TEXT NOT NULL,
 
     CONSTRAINT "Snippet_pkey" PRIMARY KEY ("id")

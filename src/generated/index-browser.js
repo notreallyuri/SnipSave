@@ -193,10 +193,10 @@ exports.Prisma.SnippetScalarFieldEnum = {
   title: 'title',
   description: 'description',
   content: 'content',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
   language: 'language',
   visibility: 'visibility',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
   userId: 'userId'
 };
 
@@ -221,7 +221,8 @@ exports.Language = exports.$Enums.Language = {
   de: 'de',
   pt: 'pt',
   ja: 'ja',
-  zh: 'zh'
+  zh: 'zh',
+  ko: 'ko'
 };
 
 exports.ThemePreference = exports.$Enums.ThemePreference = {

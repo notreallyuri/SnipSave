@@ -27,10 +27,12 @@ import React from "react";
 import { SettingsDialog } from "./dialog-preferences";
 import { useGetBaseUserData, useSignOut } from "@/hooks/fetch";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useRouter } from "next/navigation";
 
 export function NavUser() {
   const { isMobile } = useSidebar();
   const [dialogOpen, setDialogOpen] = React.useState(false);
+  const router = useRouter();
 
   const { data: user, isLoading } = useGetBaseUserData();
 
@@ -127,7 +129,13 @@ export function NavUser() {
             <DropdownMenuSeparator />
             <DropdownMenuItem
               className="cursor-pointer"
-              onClick={() => mutate()}
+              onClick={() =>
+                mutate(undefined, {
+                  onSuccess: () => {
+                    router.push("/");
+                  },
+                })
+              }
             >
               <LogOut className="mr-1 h-4 w-4" />
               <span>Sign Out</span>

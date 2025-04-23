@@ -60,7 +60,8 @@ export namespace $Enums {
   de: 'de',
   pt: 'pt',
   ja: 'ja',
-  zh: 'zh'
+  zh: 'zh',
+  ko: 'ko'
 };
 
 export type Language = (typeof Language)[keyof typeof Language]
@@ -8486,10 +8487,10 @@ export namespace Prisma {
     title: string | null
     description: string | null
     content: string | null
-    createdAt: Date | null
-    updatedAt: Date | null
     language: $Enums.CodeLanguage | null
     visibility: $Enums.SnippetVisibility | null
+    createdAt: Date | null
+    updatedAt: Date | null
     userId: string | null
   }
 
@@ -8498,10 +8499,10 @@ export namespace Prisma {
     title: string | null
     description: string | null
     content: string | null
-    createdAt: Date | null
-    updatedAt: Date | null
     language: $Enums.CodeLanguage | null
     visibility: $Enums.SnippetVisibility | null
+    createdAt: Date | null
+    updatedAt: Date | null
     userId: string | null
   }
 
@@ -8510,10 +8511,10 @@ export namespace Prisma {
     title: number
     description: number
     content: number
-    createdAt: number
-    updatedAt: number
     language: number
     visibility: number
+    createdAt: number
+    updatedAt: number
     userId: number
     _all: number
   }
@@ -8524,10 +8525,10 @@ export namespace Prisma {
     title?: true
     description?: true
     content?: true
-    createdAt?: true
-    updatedAt?: true
     language?: true
     visibility?: true
+    createdAt?: true
+    updatedAt?: true
     userId?: true
   }
 
@@ -8536,10 +8537,10 @@ export namespace Prisma {
     title?: true
     description?: true
     content?: true
-    createdAt?: true
-    updatedAt?: true
     language?: true
     visibility?: true
+    createdAt?: true
+    updatedAt?: true
     userId?: true
   }
 
@@ -8548,10 +8549,10 @@ export namespace Prisma {
     title?: true
     description?: true
     content?: true
-    createdAt?: true
-    updatedAt?: true
     language?: true
     visibility?: true
+    createdAt?: true
+    updatedAt?: true
     userId?: true
     _all?: true
   }
@@ -8633,10 +8634,10 @@ export namespace Prisma {
     title: string
     description: string | null
     content: string
-    createdAt: Date
-    updatedAt: Date
     language: $Enums.CodeLanguage
     visibility: $Enums.SnippetVisibility
+    createdAt: Date
+    updatedAt: Date
     userId: string
     _count: SnippetCountAggregateOutputType | null
     _min: SnippetMinAggregateOutputType | null
@@ -8662,10 +8663,10 @@ export namespace Prisma {
     title?: boolean
     description?: boolean
     content?: boolean
-    createdAt?: boolean
-    updatedAt?: boolean
     language?: boolean
     visibility?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
     userId?: boolean
     tags?: boolean | Snippet$tagsArgs<ExtArgs>
     user?: boolean | UserDefaultArgs<ExtArgs>
@@ -8677,10 +8678,10 @@ export namespace Prisma {
     title?: boolean
     description?: boolean
     content?: boolean
-    createdAt?: boolean
-    updatedAt?: boolean
     language?: boolean
     visibility?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
     userId?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["snippet"]>
@@ -8690,10 +8691,10 @@ export namespace Prisma {
     title?: boolean
     description?: boolean
     content?: boolean
-    createdAt?: boolean
-    updatedAt?: boolean
     language?: boolean
     visibility?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
     userId?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["snippet"]>
@@ -8703,14 +8704,14 @@ export namespace Prisma {
     title?: boolean
     description?: boolean
     content?: boolean
-    createdAt?: boolean
-    updatedAt?: boolean
     language?: boolean
     visibility?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
     userId?: boolean
   }
 
-  export type SnippetOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "description" | "content" | "createdAt" | "updatedAt" | "language" | "visibility" | "userId", ExtArgs["result"]["snippet"]>
+  export type SnippetOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "description" | "content" | "language" | "visibility" | "createdAt" | "updatedAt" | "userId", ExtArgs["result"]["snippet"]>
   export type SnippetInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     tags?: boolean | Snippet$tagsArgs<ExtArgs>
     user?: boolean | UserDefaultArgs<ExtArgs>
@@ -8734,10 +8735,10 @@ export namespace Prisma {
       title: string
       description: string | null
       content: string
-      createdAt: Date
-      updatedAt: Date
       language: $Enums.CodeLanguage
       visibility: $Enums.SnippetVisibility
+      createdAt: Date
+      updatedAt: Date
       userId: string
     }, ExtArgs["result"]["snippet"]>
     composites: {}
@@ -9168,10 +9169,10 @@ export namespace Prisma {
     readonly title: FieldRef<"Snippet", 'String'>
     readonly description: FieldRef<"Snippet", 'String'>
     readonly content: FieldRef<"Snippet", 'String'>
-    readonly createdAt: FieldRef<"Snippet", 'DateTime'>
-    readonly updatedAt: FieldRef<"Snippet", 'DateTime'>
     readonly language: FieldRef<"Snippet", 'CodeLanguage'>
     readonly visibility: FieldRef<"Snippet", 'SnippetVisibility'>
+    readonly createdAt: FieldRef<"Snippet", 'DateTime'>
+    readonly updatedAt: FieldRef<"Snippet", 'DateTime'>
     readonly userId: FieldRef<"Snippet", 'String'>
   }
     
@@ -9719,10 +9720,10 @@ export namespace Prisma {
     title: 'title',
     description: 'description',
     content: 'content',
-    createdAt: 'createdAt',
-    updatedAt: 'updatedAt',
     language: 'language',
     visibility: 'visibility',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt',
     userId: 'userId'
   };
 
@@ -10365,10 +10366,10 @@ export namespace Prisma {
     title?: StringFilter<"Snippet"> | string
     description?: StringNullableFilter<"Snippet"> | string | null
     content?: StringFilter<"Snippet"> | string
-    createdAt?: DateTimeFilter<"Snippet"> | Date | string
-    updatedAt?: DateTimeFilter<"Snippet"> | Date | string
     language?: EnumCodeLanguageFilter<"Snippet"> | $Enums.CodeLanguage
     visibility?: EnumSnippetVisibilityFilter<"Snippet"> | $Enums.SnippetVisibility
+    createdAt?: DateTimeFilter<"Snippet"> | Date | string
+    updatedAt?: DateTimeFilter<"Snippet"> | Date | string
     userId?: StringFilter<"Snippet"> | string
     tags?: TagsListRelationFilter
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
@@ -10379,10 +10380,10 @@ export namespace Prisma {
     title?: SortOrder
     description?: SortOrderInput | SortOrder
     content?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
     language?: SortOrder
     visibility?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
     userId?: SortOrder
     tags?: TagsOrderByRelationAggregateInput
     user?: UserOrderByWithRelationInput
@@ -10396,10 +10397,10 @@ export namespace Prisma {
     title?: StringFilter<"Snippet"> | string
     description?: StringNullableFilter<"Snippet"> | string | null
     content?: StringFilter<"Snippet"> | string
-    createdAt?: DateTimeFilter<"Snippet"> | Date | string
-    updatedAt?: DateTimeFilter<"Snippet"> | Date | string
     language?: EnumCodeLanguageFilter<"Snippet"> | $Enums.CodeLanguage
     visibility?: EnumSnippetVisibilityFilter<"Snippet"> | $Enums.SnippetVisibility
+    createdAt?: DateTimeFilter<"Snippet"> | Date | string
+    updatedAt?: DateTimeFilter<"Snippet"> | Date | string
     userId?: StringFilter<"Snippet"> | string
     tags?: TagsListRelationFilter
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
@@ -10410,10 +10411,10 @@ export namespace Prisma {
     title?: SortOrder
     description?: SortOrderInput | SortOrder
     content?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
     language?: SortOrder
     visibility?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
     userId?: SortOrder
     _count?: SnippetCountOrderByAggregateInput
     _max?: SnippetMaxOrderByAggregateInput
@@ -10428,10 +10429,10 @@ export namespace Prisma {
     title?: StringWithAggregatesFilter<"Snippet"> | string
     description?: StringNullableWithAggregatesFilter<"Snippet"> | string | null
     content?: StringWithAggregatesFilter<"Snippet"> | string
-    createdAt?: DateTimeWithAggregatesFilter<"Snippet"> | Date | string
-    updatedAt?: DateTimeWithAggregatesFilter<"Snippet"> | Date | string
     language?: EnumCodeLanguageWithAggregatesFilter<"Snippet"> | $Enums.CodeLanguage
     visibility?: EnumSnippetVisibilityWithAggregatesFilter<"Snippet"> | $Enums.SnippetVisibility
+    createdAt?: DateTimeWithAggregatesFilter<"Snippet"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"Snippet"> | Date | string
     userId?: StringWithAggregatesFilter<"Snippet"> | string
   }
 
@@ -10957,10 +10958,10 @@ export namespace Prisma {
     title: string
     description?: string | null
     content: string
-    createdAt?: Date | string
-    updatedAt?: Date | string
     language: $Enums.CodeLanguage
     visibility?: $Enums.SnippetVisibility
+    createdAt?: Date | string
+    updatedAt?: Date | string
     tags?: TagsCreateNestedManyWithoutSnippetsInput
     user: UserCreateNestedOneWithoutSnippetsInput
   }
@@ -10970,10 +10971,10 @@ export namespace Prisma {
     title: string
     description?: string | null
     content: string
-    createdAt?: Date | string
-    updatedAt?: Date | string
     language: $Enums.CodeLanguage
     visibility?: $Enums.SnippetVisibility
+    createdAt?: Date | string
+    updatedAt?: Date | string
     userId: string
     tags?: TagsUncheckedCreateNestedManyWithoutSnippetsInput
   }
@@ -10983,10 +10984,10 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     content?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     language?: EnumCodeLanguageFieldUpdateOperationsInput | $Enums.CodeLanguage
     visibility?: EnumSnippetVisibilityFieldUpdateOperationsInput | $Enums.SnippetVisibility
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     tags?: TagsUpdateManyWithoutSnippetsNestedInput
     user?: UserUpdateOneRequiredWithoutSnippetsNestedInput
   }
@@ -10996,10 +10997,10 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     content?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     language?: EnumCodeLanguageFieldUpdateOperationsInput | $Enums.CodeLanguage
     visibility?: EnumSnippetVisibilityFieldUpdateOperationsInput | $Enums.SnippetVisibility
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     userId?: StringFieldUpdateOperationsInput | string
     tags?: TagsUncheckedUpdateManyWithoutSnippetsNestedInput
   }
@@ -11009,10 +11010,10 @@ export namespace Prisma {
     title: string
     description?: string | null
     content: string
-    createdAt?: Date | string
-    updatedAt?: Date | string
     language: $Enums.CodeLanguage
     visibility?: $Enums.SnippetVisibility
+    createdAt?: Date | string
+    updatedAt?: Date | string
     userId: string
   }
 
@@ -11021,10 +11022,10 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     content?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     language?: EnumCodeLanguageFieldUpdateOperationsInput | $Enums.CodeLanguage
     visibility?: EnumSnippetVisibilityFieldUpdateOperationsInput | $Enums.SnippetVisibility
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type SnippetUncheckedUpdateManyInput = {
@@ -11032,10 +11033,10 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     content?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     language?: EnumCodeLanguageFieldUpdateOperationsInput | $Enums.CodeLanguage
     visibility?: EnumSnippetVisibilityFieldUpdateOperationsInput | $Enums.SnippetVisibility
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     userId?: StringFieldUpdateOperationsInput | string
   }
 
@@ -11616,10 +11617,10 @@ export namespace Prisma {
     title?: SortOrder
     description?: SortOrder
     content?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
     language?: SortOrder
     visibility?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
     userId?: SortOrder
   }
 
@@ -11628,10 +11629,10 @@ export namespace Prisma {
     title?: SortOrder
     description?: SortOrder
     content?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
     language?: SortOrder
     visibility?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
     userId?: SortOrder
   }
 
@@ -11640,10 +11641,10 @@ export namespace Prisma {
     title?: SortOrder
     description?: SortOrder
     content?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
     language?: SortOrder
     visibility?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
     userId?: SortOrder
   }
 
@@ -12603,10 +12604,10 @@ export namespace Prisma {
     title: string
     description?: string | null
     content: string
-    createdAt?: Date | string
-    updatedAt?: Date | string
     language: $Enums.CodeLanguage
     visibility?: $Enums.SnippetVisibility
+    createdAt?: Date | string
+    updatedAt?: Date | string
     tags?: TagsCreateNestedManyWithoutSnippetsInput
   }
 
@@ -12615,10 +12616,10 @@ export namespace Prisma {
     title: string
     description?: string | null
     content: string
-    createdAt?: Date | string
-    updatedAt?: Date | string
     language: $Enums.CodeLanguage
     visibility?: $Enums.SnippetVisibility
+    createdAt?: Date | string
+    updatedAt?: Date | string
     tags?: TagsUncheckedCreateNestedManyWithoutSnippetsInput
   }
 
@@ -12789,10 +12790,10 @@ export namespace Prisma {
     title?: StringFilter<"Snippet"> | string
     description?: StringNullableFilter<"Snippet"> | string | null
     content?: StringFilter<"Snippet"> | string
-    createdAt?: DateTimeFilter<"Snippet"> | Date | string
-    updatedAt?: DateTimeFilter<"Snippet"> | Date | string
     language?: EnumCodeLanguageFilter<"Snippet"> | $Enums.CodeLanguage
     visibility?: EnumSnippetVisibilityFilter<"Snippet"> | $Enums.SnippetVisibility
+    createdAt?: DateTimeFilter<"Snippet"> | Date | string
+    updatedAt?: DateTimeFilter<"Snippet"> | Date | string
     userId?: StringFilter<"Snippet"> | string
   }
 
@@ -12990,10 +12991,10 @@ export namespace Prisma {
     title: string
     description?: string | null
     content: string
-    createdAt?: Date | string
-    updatedAt?: Date | string
     language: $Enums.CodeLanguage
     visibility?: $Enums.SnippetVisibility
+    createdAt?: Date | string
+    updatedAt?: Date | string
     user: UserCreateNestedOneWithoutSnippetsInput
   }
 
@@ -13002,10 +13003,10 @@ export namespace Prisma {
     title: string
     description?: string | null
     content: string
-    createdAt?: Date | string
-    updatedAt?: Date | string
     language: $Enums.CodeLanguage
     visibility?: $Enums.SnippetVisibility
+    createdAt?: Date | string
+    updatedAt?: Date | string
     userId: string
   }
 
@@ -13184,10 +13185,10 @@ export namespace Prisma {
     title: string
     description?: string | null
     content: string
-    createdAt?: Date | string
-    updatedAt?: Date | string
     language: $Enums.CodeLanguage
     visibility?: $Enums.SnippetVisibility
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type EmailVerificationTokenCreateManyUserInput = {
@@ -13276,10 +13277,10 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     content?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     language?: EnumCodeLanguageFieldUpdateOperationsInput | $Enums.CodeLanguage
     visibility?: EnumSnippetVisibilityFieldUpdateOperationsInput | $Enums.SnippetVisibility
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     tags?: TagsUpdateManyWithoutSnippetsNestedInput
   }
 
@@ -13288,10 +13289,10 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     content?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     language?: EnumCodeLanguageFieldUpdateOperationsInput | $Enums.CodeLanguage
     visibility?: EnumSnippetVisibilityFieldUpdateOperationsInput | $Enums.SnippetVisibility
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     tags?: TagsUncheckedUpdateManyWithoutSnippetsNestedInput
   }
 
@@ -13300,10 +13301,10 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     content?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     language?: EnumCodeLanguageFieldUpdateOperationsInput | $Enums.CodeLanguage
     visibility?: EnumSnippetVisibilityFieldUpdateOperationsInput | $Enums.SnippetVisibility
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type EmailVerificationTokenUpdateWithoutUserInput = {
@@ -13338,10 +13339,10 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     content?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     language?: EnumCodeLanguageFieldUpdateOperationsInput | $Enums.CodeLanguage
     visibility?: EnumSnippetVisibilityFieldUpdateOperationsInput | $Enums.SnippetVisibility
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutSnippetsNestedInput
   }
 
@@ -13350,10 +13351,10 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     content?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     language?: EnumCodeLanguageFieldUpdateOperationsInput | $Enums.CodeLanguage
     visibility?: EnumSnippetVisibilityFieldUpdateOperationsInput | $Enums.SnippetVisibility
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     userId?: StringFieldUpdateOperationsInput | string
   }
 
@@ -13362,10 +13363,10 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     content?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     language?: EnumCodeLanguageFieldUpdateOperationsInput | $Enums.CodeLanguage
     visibility?: EnumSnippetVisibilityFieldUpdateOperationsInput | $Enums.SnippetVisibility
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     userId?: StringFieldUpdateOperationsInput | string
   }
 

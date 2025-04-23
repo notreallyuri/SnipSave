@@ -1,16 +1,22 @@
 import { z } from "zod";
-import { editorTheme, defaultCodeLanguage } from "./enums/user-pref";
+import {
+  editorTheme,
+  codeLanguage,
+  themePreference,
+  snippetVisibility,
+  language,
+} from "./enums";
 
 const userPreferencesSchema = z.object({
-  language: z.enum(["en", "es", "fr", "de", "pt", "ja", "zh"]).optional(),
-  themePreference: z.enum(["light", "dark", "system"]).optional(),
+  language: language.optional(),
+  themePreference: themePreference.optional(),
   editorTheme: editorTheme.optional(),
   notifications: z.boolean().optional(),
-  defaultCodeLanguage: defaultCodeLanguage.optional(),
+  defaultCodeLanguage: codeLanguage.optional(),
   autosave: z.boolean().optional(),
   lineNumbers: z.boolean().optional(),
   showWelcomeTips: z.boolean().optional(),
-  defaultSnippetVisibility: z.enum(["public", "private"]).optional(),
+  defaultSnippetVisibility: snippetVisibility.optional(),
   editorFontSize: z.number().int().min(9).max(24).optional(),
   keyboardShortcuts: z.boolean().optional(),
 });

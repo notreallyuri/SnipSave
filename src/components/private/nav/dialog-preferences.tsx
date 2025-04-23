@@ -18,6 +18,14 @@ import {
 } from "../../ui/select";
 
 import {
+  CodeLanguage,
+  EditorTheme,
+  SnippetVisibility,
+  ThemePreference,
+  Language,
+} from "@/generated/client";
+
+import {
   Form,
   FormField,
   FormItem,
@@ -30,9 +38,7 @@ import { useGetPreferences, useUpdatePreferences } from "@/hooks/fetch";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { UserSchema, UserSchemaTypes } from "@/schemas";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
 
-import pref from "@/config/preferences.json";
 import React from "react";
 
 export function SettingsDialog({
@@ -46,7 +52,7 @@ export function SettingsDialog({
   const { data, isLoading } = useGetPreferences();
   const { mutate: updatePreferences, isPending } = useUpdatePreferences();
 
-  const preferences: UserSchemaTypes["preferences"] = data;
+  const preferences: UserSchemaTypes["preferences"] = data ?? {};
 
   React.useEffect(() => {
     console.log("Fetched Data:", data);
@@ -55,24 +61,45 @@ export function SettingsDialog({
 
   const form = useForm<UserSchemaTypes["preferences"]>({
     resolver: zodResolver(UserSchema["preferences"]),
-    defaultValues: preferences,
-    values: preferences,
+    defaultValues: data ?? {
+      language: undefined,
+      themePreference: undefined,
+      editorTheme: undefined,
+      defaultCodeLanguage: undefined,
+      defaultSnippetVisibility: undefined,
+      keyboardShortcuts: true,
+    },
   });
 
   React.useEffect(() => {
-    if (data?.preferences) {
-      form.reset(preferences);
-      console.log("Editor preference:", preferences.editorTheme);
+    if (data) {
+      form.reset(data);
+      console.log("Editor preference:", data.editorTheme);
     }
   }, [data, form]);
 
-  const {
-    languages,
-    codeLanguages,
-    themes,
-    editorThemes,
-    snippetVisibilities,
-  } = pref;
+  const languages = Object.values(Language);
+  const codeLanguages = Object.values(CodeLanguage);
+  const editorThemes = Object.values(EditorTheme);
+  const snippetVisibilities = Object.values(SnippetVisibility);
+  const themes = Object.values(ThemePreference);
+
+  const languageLabels: Record<Language, string> = {
+    en: "English",
+    es: "Spanish",
+    fr: "French",
+    de: "German",
+    pt: "Portuguese",
+    ja: "Japanese",
+    zh: "Chinese",
+    ko: "Korean",
+  };
+
+  const pretty = (str: string) =>
+    str
+      .replace(/_/g, " ")
+      .toLowerCase()
+      .replace(/\b\w/g, (c) => c.toUpperCase());
 
   const onSubmit = async (data: UserSchemaTypes["preferences"]) => {
     updatePreferences(data, {
@@ -110,14 +137,11 @@ export function SettingsDialog({
                         <SelectValue placeholder="Select language" />
                       </SelectTrigger>
                       <SelectContent>
-                        {languages.map((lang) => {
-                          const [label, value] = Object.entries(lang)[0];
-                          return (
-                            <SelectItem key={value} value={value}>
-                              {label}
-                            </SelectItem>
-                          );
-                        })}
+                        {languages.map((lang) => (
+                          <SelectItem key={lang} value={lang}>
+                            {languageLabels[lang]}
+                          </SelectItem>
+                        ))}
                       </SelectContent>
                     </Select>
                   </FormControl>
@@ -139,11 +163,9 @@ export function SettingsDialog({
                       </SelectTrigger>
                       <SelectContent>
                         {themes.map((theme) => {
-                          const [label, value] = Object.entries(theme)[0];
-
                           return (
-                            <SelectItem key={value} value={value}>
-                              {label}
+                            <SelectItem key={theme} value={theme}>
+                              {pretty(theme)}
                             </SelectItem>
                           );
                         })}
@@ -168,11 +190,9 @@ export function SettingsDialog({
                       </SelectTrigger>
                       <SelectContent>
                         {codeLanguages.map((lang) => {
-                          const [label, value] = Object.entries(lang)[0];
-
                           return (
-                            <SelectItem key={value} value={value}>
-                              {label}
+                            <SelectItem key={lang} value={lang}>
+                              {pretty(lang)}
                             </SelectItem>
                           );
                         })}
@@ -197,11 +217,9 @@ export function SettingsDialog({
                       </SelectTrigger>
                       <SelectContent>
                         {editorThemes.map((theme) => {
-                          const [label, value] = Object.entries(theme)[0];
-
                           return (
-                            <SelectItem key={value} value={value}>
-                              {label}
+                            <SelectItem key={theme} value={theme}>
+                              {pretty(theme)}
                             </SelectItem>
                           );
                         })}
@@ -227,11 +245,9 @@ export function SettingsDialog({
                       </SelectTrigger>
                       <SelectContent>
                         {snippetVisibilities.map((visibility) => {
-                          const [label, value] = Object.entries(visibility)[0];
-
                           return (
-                            <SelectItem key={value} value={value}>
-                              {label}
+                            <SelectItem key={visibility} value={visibility}>
+                              {pretty(visibility)}
                             </SelectItem>
                           );
                         })}

@@ -1,12 +1,12 @@
 import type { ISessionRepository } from "../repository";
-import { CreateSessionInput, Service } from "@/interfaces";
+import { Service } from "@/interfaces";
 
 export class CreateSessionService
-  implements Service<ISessionRepository, string, void>
+  implements Service<ISessionRepository, string, string>
 {
   constructor(public repository: ISessionRepository) {}
 
-  async execute(id: string): Promise<void> {
-    await this.repository.createUserSession(id);
+  async execute(id: string): Promise<string> {
+    return await this.repository.createUserSession(id);
   }
 }

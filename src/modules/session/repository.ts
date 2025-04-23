@@ -8,23 +8,11 @@ import crypto from "crypto";
 
 export interface ISessionRepository {
   getUserId(): Promise<string | null>;
-  createUserSession(userId: string): Promise<void>;
-  deleteSession(): Promise<null | void>;
+  createUserSession(userId: string): Promise<string>;
+  deleteSession(sessionId: string): Promise<null | void>;
 }
 
 export class SessionRepository implements ISessionRepository {
-  private async setCookies(sessionToken: string) {
-    const cookieStore = await cookies();
-
-    cookieStore.set(COOKIE_SESSION_KEY, sessionToken, {
-      secure: process.env.NODE_ENV === "production",
-      httpOnly: true,
-      sameSite: "lax",
-      path: "/",
-      maxAge: SESSION_EXPIRATION_SECONDS,
-    });
-  }
-
   private async getUserSessionById(sessionId: string) {
     const data = await redisClient.get(`session:${sessionId}`);
     if (!data) return null;
@@ -45,14 +33,10 @@ export class SessionRepository implements ISessionRepository {
     await redisClient.set(`session:${sessionToken}`, userId, {
       ex: SESSION_EXPIRATION_SECONDS,
     });
-    this.setCookies(sessionToken);
+    return sessionToken;
   }
 
-  async deleteSession() {
-    const cookieStore = await cookies();
-    const sessionId = cookieStore.get(COOKIE_SESSION_KEY)?.value;
-    if (!sessionId) return null;
+  async deleteSession(sessionId: string) {
     await redisClient.del(`session:${sessionId}`);
-    cookieStore.delete(COOKIE_SESSION_KEY);
   }
 }

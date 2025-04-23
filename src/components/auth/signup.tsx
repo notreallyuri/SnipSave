@@ -33,16 +33,25 @@ export function SignUp() {
   const { mutate } = useSignUp();
 
   const onSubmit = async (data: UserSchemaTypes["signUp"]) => {
-    try {
-      mutate(data, {
+    console.log("Submitting data:", data);
+    const { confirmPassword, ...payload } = data;
+
+    mutate(
+      {
+        username: payload.username,
+        email: payload.email,
+        password: payload.password,
+      },
+      {
         onSuccess: () => {
           toast.success("Account created successfully");
           router.push("/home");
         },
-      });
-    } catch (err: any) {
-      toast.error(err.message || "Something went wrong");
-    }
+        onError: (error) => {
+          toast.error(error.message || "Failed to create account");
+        },
+      }
+    );
   };
 
   return (

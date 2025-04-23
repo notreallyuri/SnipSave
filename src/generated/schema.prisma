@@ -16,6 +16,7 @@ enum Language {
   pt
   ja
   zh
+  ko
 }
 
 enum ThemePreference {
@@ -154,12 +155,13 @@ model Snippet {
   title       String
   description String?
   content     String
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
 
   language   CodeLanguage
   visibility SnippetVisibility @default(public)
   tags       Tags[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   userId String
   user   User   @relation(fields: [userId], references: [id])

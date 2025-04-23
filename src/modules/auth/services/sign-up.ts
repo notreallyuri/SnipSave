@@ -2,7 +2,6 @@ import { IUserRepository } from "@/modules/user";
 import { Service, BaseUserData } from "@/interfaces";
 import { customHasher } from "@/lib/utils";
 import { UserSchemaTypes } from "@/schemas";
-import { TRPCError } from "@trpc/server";
 
 export class SignUpService
   implements Service<IUserRepository, UserSchemaTypes["create"], BaseUserData>
@@ -14,9 +13,8 @@ export class SignUpService
 
     const existingUser = await this.repository.getUserByEmail(email);
     if (existingUser) {
-      throw new TRPCError({
-        code: "CONFLICT",
-        message: "User already exists",
+      throw new Error("NOT FOUND", {
+        cause: "User already exists",
       });
     }
 
