@@ -28,17 +28,24 @@ import { SettingsDialog } from "./dialog-preferences";
 import { useGetBaseUserData, useSignOut } from "@/hooks/fetch";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useRouter } from "next/navigation";
+import { CircleAlert } from "lucide-react";
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 
 export function NavUser() {
-  const { isMobile } = useSidebar();
+  const { isMobile, open } = useSidebar();
   const [dialogOpen, setDialogOpen] = React.useState(false);
   const router = useRouter();
 
-  const { data: user, isLoading } = useGetBaseUserData();
+  const { data: user, isPending } = useGetBaseUserData();
+
+  const profilePicture = user?.image as string | undefined;
+
+  console.log("Profile Picture URL:", profilePicture);
 
   const { mutate } = useSignOut();
 
-  if (isLoading || !user) {
+  if (isPending || !user) {
     return (
       <SidebarMenu>
         <SidebarMenuItem>
@@ -56,6 +63,23 @@ export function NavUser() {
 
   return (
     <SidebarMenu>
+      {user.isEmailVerified === false && open ? (
+        <SidebarMenuItem className="flex flex-col gap-4 rounded-lg border border-emerald-400/75 bg-emerald-400/25 p-2">
+          <div className="flex items-center gap-x-2">
+            <CircleAlert className="text-primary size-4" />
+            <h2 className="text-primary leading-tight font-semibold">
+              Verify your email
+            </h2>
+          </div>
+          <Button size={"sm"} className="text-sm">
+            Send now
+          </Button>
+        </SidebarMenuItem>
+      ) : (
+        <SidebarMenuItem className="flex flex-col items-center gap-4 rounded-lg border border-emerald-400/60 bg-emerald-400/20 py-2">
+          <CircleAlert className="text-primary size-4" />
+        </SidebarMenuItem>
+      )}
       <SidebarMenuItem>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -64,10 +88,7 @@ export function NavUser() {
               className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
             >
               <Avatar className="size-8 rounded-lg">
-                <AvatarImage
-                  src={user?.image ?? undefined}
-                  alt={user.username}
-                />
+                <AvatarImage src={profilePicture} alt={user.username} />
                 <AvatarFallback className="rounded-lg">
                   {user.username?.charAt(0).toUpperCase() || ""}
                 </AvatarFallback>
@@ -93,7 +114,7 @@ export function NavUser() {
                     alt={user.username}
                   />
                   <AvatarFallback className="rounded-lg">
-                    {user.username?.charAt(0).toUpperCase() || "CN"}
+                    {user.username?.charAt(0).toUpperCase() || ""}
                   </AvatarFallback>
                 </Avatar>
                 <div className="grid flex-1 text-left text-sm leading-tight">

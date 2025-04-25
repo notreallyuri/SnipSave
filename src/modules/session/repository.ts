@@ -1,42 +1,49 @@
-import {
-  COOKIE_SESSION_KEY,
-  SESSION_EXPIRATION_SECONDS,
-} from "@/config/config";
+import { getIronSession, type SessionOptions } from "iron-session";
+import { baseSessionOptions, SessionData } from "@/modules/session/config";
 import { cookies } from "next/headers";
-import { redisClient } from "@/lib/redis";
-import crypto from "crypto";
+
+export type SessionInput = {
+  user: {
+    id: string;
+    username: string;
+    email: string;
+    isEmailVerified: boolean;
+  };
+  remember: boolean;
+};
 
 export interface ISessionRepository {
-  getUserId(): Promise<string | null>;
-  createUserSession(userId: string): Promise<string>;
-  deleteSession(sessionId: string): Promise<null | void>;
+  createSession({ user, remember }: SessionInput): Promise<void>;
+  getUserSession(): Promise<SessionData["user"]>;
+  destroySession(): Promise<void>;
 }
 
 export class SessionRepository implements ISessionRepository {
-  private async getUserSessionById(sessionId: string) {
-    const data = await redisClient.get(`session:${sessionId}`);
-    if (!data) return null;
-    if (typeof data !== "string") return null;
-    return data;
+  private getSession = async (remember = false) => {
+    const sessionOptions: SessionOptions = {
+      ...baseSessionOptions,
+      cookieOptions: {
+        ...baseSessionOptions.cookieOptions,
+        maxAge: remember ? 60 * 60 * 24 * 30 : undefined,
+      },
+    };
+
+    return getIronSession<SessionData>(await cookies(), sessionOptions);
+  };
+
+  public async createSession({ user, remember }: SessionInput): Promise<void> {
+    const session = await this.getSession(remember);
+    session.user = user;
+    await session.save();
   }
 
-  async getUserId() {
-    const cookieStore = await cookies();
-    const sessionId = cookieStore.get(COOKIE_SESSION_KEY)?.value;
-    console.log("Session ID from cookie:", sessionId);
-    if (!sessionId) return null;
-    return await this.getUserSessionById(sessionId);
+  public async getUserSession(): Promise<SessionData["user"]> {
+    const session = await this.getSession();
+    return session.user;
   }
 
-  async createUserSession(userId: string) {
-    const sessionToken = crypto.randomBytes(32).toString("hex");
-    await redisClient.set(`session:${sessionToken}`, userId, {
-      ex: SESSION_EXPIRATION_SECONDS,
-    });
-    return sessionToken;
-  }
-
-  async deleteSession(sessionId: string) {
-    await redisClient.del(`session:${sessionId}`);
+  public async destroySession(): Promise<void> {
+    const session = await this.getSession();
+    session.destroy();
   }
 }

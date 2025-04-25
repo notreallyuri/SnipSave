@@ -7,7 +7,11 @@ export interface ISnippetRepository {
     authorId: string,
     data: SnippetSchemaTypes["create"]
   ): Promise<Snippet>;
-  update(id: string, data: SnippetSchemaTypes["update"]): Promise<Snippet>;
+  update(
+    id: string,
+    authorId: string,
+    data: SnippetSchemaTypes["update"]
+  ): Promise<Snippet>;
   delete(id: string, authorId: string): Promise<boolean>;
   getById(id: string): Promise<Snippet | null>;
   getByAuthor(authorId: string): Promise<SnippetSchemaTypes["table"][]>;
@@ -26,8 +30,20 @@ export class SnippetRepository implements ISnippetRepository {
     });
   }
 
-  update(id: string, data: SnippetSchemaTypes["update"]): Promise<Snippet> {
-    return prisma.snippet.update({
+  async update(
+    id: string,
+    authorId: string,
+    data: SnippetSchemaTypes["update"]
+  ): Promise<Snippet> {
+    const snippet = await prisma.snippet.findUnique({
+      where: { id },
+    });
+
+    if (!snippet || snippet.userId !== authorId) {
+      throw new Error("Snippet not found");
+    }
+
+    return await prisma.snippet.update({
       where: { id },
       data,
     });

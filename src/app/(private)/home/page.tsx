@@ -11,6 +11,8 @@ import { Progress } from "@/components/ui/progress";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { SearchBar } from "@/components/private/search";
 import { DataTable } from "@/components/private/data-table";
+import { SnippetDialog } from "@/components/private/snippet-dialog";
+import { UploadPFP } from "@/components/private/uploadthings";
 
 metadata.title = "Home | SnipSave";
 
@@ -54,7 +56,9 @@ export default function Home() {
             <CardDescription>Create your own snippets</CardDescription>
           </CardHeader>
           <CardContent className="hidden h-full items-end justify-end sm:flex">
-            <Button variant={"outline"}>New</Button>
+            <SnippetDialog>
+              <Button variant={"outline"}>New</Button>
+            </SnippetDialog>
           </CardContent>
         </Card>
 
@@ -98,8 +102,8 @@ export default function Home() {
             <p className="text-muted-foreground text-sm">20%</p>
           </CardContent>
         </Card>
-        <Card className="transition hover:shadow-lg col-span-1 pt-0 pb-2 lg:col-span-4 gap-0 overflow-hidden rounded-lg dark:hover:shadow-emerald-400/20">
-          <DataTable data={mockData} />
+        <Card className="col-span-1 gap-0 overflow-hidden rounded-lg pt-0 pb-2 transition hover:shadow-lg lg:col-span-4 dark:hover:shadow-emerald-400/20">
+          <DataTable data={[]} />
         </Card>
       </main>
     </>

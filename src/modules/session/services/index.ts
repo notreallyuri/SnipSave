@@ -1,3 +1,3 @@
-export * from "./delete-session";
-export * from "./create-session";
-export * from "./get-user-id";
+export * from "./create";
+export * from "./delete";
+export * from "./get-user";

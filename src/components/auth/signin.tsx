@@ -6,7 +6,9 @@ import {
   FormField,
   FormMessage,
   FormLabel,
+  useFormField,
 } from "../ui/form";
+import { Checkbox } from "../ui/checkbox";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { useSignIn } from "@/hooks/fetch";
@@ -15,19 +17,21 @@ import { UserSchema, UserSchemaTypes } from "@/schemas";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
+import { cn } from "@/lib/utils";
 
 export function SignIn() {
   const router = useRouter();
 
-  const form = useForm<UserSchemaTypes["signIn"]>({
-    resolver: zodResolver(UserSchema["signIn"]),
+  const form = useForm({
+    resolver: zodResolver(UserSchema.signIn),
     defaultValues: {
       email: "",
       password: "",
+      remember: false,
     },
   });
 
-  const { mutate } = useSignIn();
+  const { mutate, isPending } = useSignIn();
 
   const onSubmit = async (data: UserSchemaTypes["signIn"]) => {
     mutate(data, {
@@ -70,11 +74,25 @@ export function SignIn() {
             </FormItem>
           )}
         />
-        <Button
-          type="submit"
-          className="w-full cursor-pointer bg-emerald-500 text-white hover:bg-emerald-400"
-        >
-          Enter
+
+        <FormField
+          name="remember"
+          control={form.control}
+          render={({ field }) => (
+            <FormItem className="flex items-center">
+              <FormControl>
+                <Checkbox
+                  checked={field.value}
+                  onCheckedChange={field.onChange}
+                />
+              </FormControl>
+              <FormLabel>Remember me</FormLabel>
+            </FormItem>
+          )}
+        />
+
+        <Button type="submit" className="w-full" disabled={isPending}>
+          {isPending ? "Signing in..." : "Sign In"}
         </Button>
       </form>
     </Form>

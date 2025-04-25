@@ -6,6 +6,10 @@ import { Metadata } from "next";
 import React from "react";
 import "./globals.css";
 
+import { extractRouterConfig } from "uploadthing/server";
+import { NextSSRPlugin } from "@uploadthing/react/next-ssr-plugin";
+import { ourFileRouter } from "./api/uploadthing/core";
+
 export const metadata: Metadata = {
   title: "SnipSave",
   description:
@@ -29,6 +33,7 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
+            <NextSSRPlugin routerConfig={extractRouterConfig(ourFileRouter)} />
             {children}
             <Toaster />
           </ThemeProvider>

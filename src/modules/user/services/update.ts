@@ -23,6 +23,18 @@ export class UpdateUser
   }
 }
 
+export class UpdateUserProfilePicture
+  implements Service<IUserRepository, { id: string; url: string }, void>
+{
+  constructor(public repository: IUserRepository) {}
+
+  async execute(args: { id: string; url: string }): Promise<void> {
+    const { id, url } = args;
+
+    return this.repository.updateProfilePicture(id, url);
+  }
+}
+
 export class UpdateUserPreferences
   implements
     Service<

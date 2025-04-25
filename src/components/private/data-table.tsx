@@ -16,7 +16,6 @@ import {
 } from "@tanstack/react-table";
 import {
   DropdownMenu,
-  DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
@@ -72,8 +71,8 @@ const columns: ColumnDef<TableSchema>[] = [
             (table.getIsSomePageRowsSelected() && "indeterminate")
           }
           onCheckedChange={(value) => table.toggleAllRowsSelected(!!value)}
-          aria-label="Selecione todos"
-          className=""
+          aria-label="Select all"
+          className="dark:data-[state=checked]:bg-emerald-500 dark:data-[state=checked]:border-emerald-500 dark:data-[state=checked]:text-primary"
         />
       </div>
     ),
@@ -82,7 +81,8 @@ const columns: ColumnDef<TableSchema>[] = [
         <Checkbox
           checked={row.getIsSelected()}
           onCheckedChange={(value) => row.toggleSelected(!!value)}
-          aria-label="Selecione"
+          aria-label="Select row"
+          className="dark:data-[state=checked]:bg-emerald-500 dark:data-[state=checked]:border-emerald-500 dark:data-[state=checked]:text-primary"
         />
       </div>
     ),
@@ -94,7 +94,7 @@ const columns: ColumnDef<TableSchema>[] = [
     header: "Name",
     cell: ({ row }) => {
       return (
-        <Link href={"/"}>
+        <Link href={`/snippet/${row.original.id}`}>
           <Button
             variant={"link"}
             className="text-foreground w-fit px-0 text-left"
@@ -243,12 +243,12 @@ export function DataTable({ data: initialData }: { data: TableSchema[] }) {
       <div className="flex items-center justify-between px-4 sm:col-span-2 lg:col-span-4">
         <div className="text-muted-foreground hidden flex-1 text-sm lg:flex">
           {table.getFilteredSelectedRowModel().rows.length} of{" "}
-          {table.getFilteredRowModel().rows.length} linha(s) selecionadas.
+          {table.getFilteredRowModel().rows.length} row(s) selected.
         </div>
         <div className="flex w-full items-center gap-8 lg:w-fit">
           <div className="hidden items-center gap-2 lg:flex">
             <Label htmlFor="rows-per-page" className="text-sm font-medium">
-              Linhas por página
+              Rows per page
             </Label>
             <Select
               value={`${table.getState().pagination.pageSize}`}
@@ -281,7 +281,7 @@ export function DataTable({ data: initialData }: { data: TableSchema[] }) {
               onClick={() => table.setPageIndex(0)}
               disabled={!table.getCanPreviousPage()}
             >
-              <span className="sr-only">Ir para a primeira página</span>
+              <span className="sr-only">Go to first page</span>
               <ChevronsLeftIcon />
             </Button>
             <Button
@@ -291,7 +291,7 @@ export function DataTable({ data: initialData }: { data: TableSchema[] }) {
               onClick={() => table.previousPage()}
               disabled={!table.getCanPreviousPage()}
             >
-              <span className="sr-only">Ir para a página anterior</span>
+              <span className="sr-only">Go to previous page</span>
               <ChevronLeftIcon />
             </Button>
             <Button
@@ -301,7 +301,7 @@ export function DataTable({ data: initialData }: { data: TableSchema[] }) {
               onClick={() => table.nextPage()}
               disabled={!table.getCanNextPage()}
             >
-              <span className="sr-only">Ir para a próxima página</span>
+              <span className="sr-only">Go to next page</span>
               <ChevronRightIcon />
             </Button>
             <Button
@@ -311,7 +311,7 @@ export function DataTable({ data: initialData }: { data: TableSchema[] }) {
               onClick={() => table.setPageIndex(table.getPageCount() - 1)}
               disabled={!table.getCanNextPage()}
             >
-              <span className="sr-only">Ir para a ultima página</span>
+              <span className="sr-only">Go to last page</span>
               <ChevronsRightIcon />
             </Button>
           </div>

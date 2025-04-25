@@ -1,5 +1,5 @@
 import { getBaseUserData, getUserById } from "../factory";
-import { getUserIdBySession } from "@/modules/session";
+import { getUserBySession } from "@/modules/session/factory";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function getUserByIdController(req: NextRequest) {
@@ -24,20 +24,13 @@ export async function getUserByIdController(req: NextRequest) {
 
 export async function getCurrentUserController() {
   try {
-    const id = await getUserIdBySession.execute();
-
-    if (!id) {
-      return NextResponse.json(
-        { error: "User not authenticated" },
-        { status: 401 }
-      );
-    }
-
-    const user = await getBaseUserData.execute(id);
+    const user = await getUserBySession.execute();
 
     if (!user) {
       return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
+
+    console.log("User found:", user);
 
     return NextResponse.json(user, { status: 200 });
   } catch (error) {

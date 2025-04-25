@@ -60,24 +60,19 @@ enum SnippetVisibility {
   private
 }
 
-model Account {
-  id                String   @id @default(cuid())
-  userId            String
-  type              String
-  provider          String
-  providerAccountId String
-  refresh_token     String?
-  access_token      String?
-  expires_at        Int?
-  token_type        String?
-  scope             String?
-  id_token          String?
-  session_state     String?
-  createdAt         DateTime @default(now())
-  updatedAt         DateTime @updatedAt
-  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+enum Providers {
+  google
+  github
+  discord
+}
 
-  @@unique([provider, providerAccountId])
+model OAuthAccount {
+  userId            String
+  User              User      @relation(fields: [userId], references: [id])
+  provider          Providers
+  providerAccountId String    @unique
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
 }
 
 model LoginHistory {
@@ -92,18 +87,18 @@ model LoginHistory {
 
 model User {
   id                     String                   @id @default(cuid())
+  image                  String?
   username               String
   email                  String                   @unique
-  salt                   String
-  emailVerified          DateTime?
-  image                  String?
+  password               String?
+  salt                   String?
+  emailVerified          Boolean?                 @default(false)
   createdAt              DateTime                 @default(now())
   updatedAt              DateTime                 @updatedAt
-  accounts               Account[]
+  accounts               OAuthAccount[]
   loginHistory           LoginHistory[]
   preferences            UserPreferences?
   snippets               Snippet[]
-  password               String
   EmailVerificationToken EmailVerificationToken[]
 }
 

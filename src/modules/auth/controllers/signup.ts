@@ -1,37 +1,37 @@
 import { signUp } from "@/modules/auth";
-import { createSession } from "@/modules/session";
 import { NextRequest, NextResponse } from "next/server";
-import { UserSchema } from "@/schemas";
-import { cookies } from "next/headers";
-import { COOKIE_SESSION_KEY, SESSION_EXPIRATION_SECONDS } from "@/config";
+import { UserSchema, UserSchemaTypes } from "@/schemas";
+import { createSession } from "@/modules/session";
 
 export async function signUpController(req: NextRequest) {
   try {
-    const cookieStore = await cookies();
     const body = await req.json();
     console.log("Body:", body);
 
-    const data = UserSchema.create.parse(body);
+    const { remember, confirmPassword, ...userData } =
+      body as UserSchemaTypes["signUp"];
 
-    console.log("Validated Data:", data);
+    const { data, error } = UserSchema.create.safeParse(userData);
+
+    if (error) {
+      return NextResponse.json(
+        { error: "Invalid data", details: error.flatten() },
+        { status: 422 },
+      );
+    }
 
     const user = await signUp.execute(data);
 
     if (!user) {
       return NextResponse.json(
         { error: "User already exists" },
-        { status: 409 }
+        { status: 409 },
       );
     }
 
-    const token = await createSession.execute(user.id);
-
-    cookieStore.set(COOKIE_SESSION_KEY, token, {
-      secure: process.env.NODE_ENV === "production",
-      httpOnly: true,
-      sameSite: "lax",
-      path: "/",
-      maxAge: SESSION_EXPIRATION_SECONDS,
+    await createSession.execute({
+      user,
+      remember
     });
 
     console.log("User created and session created:", user.id);

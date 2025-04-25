@@ -9,6 +9,7 @@ import {
 } from "../ui/form";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
+import { Checkbox } from "../ui/checkbox";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { UserSchema, UserSchemaTypes } from "@/schemas";
@@ -16,42 +17,34 @@ import { useRouter } from "next/navigation";
 import { useSignUp } from "@/hooks/fetch";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
+import { cn } from "@/lib/utils";
 
 export function SignUp() {
   const router = useRouter();
 
-  const form = useForm<UserSchemaTypes["signUp"]>({
-    resolver: zodResolver(UserSchema["signUp"]),
+  const form = useForm({
+    resolver: zodResolver(UserSchema.signUp),
     defaultValues: {
       username: "",
       email: "",
       password: "",
       confirmPassword: "",
+      remember: false,
     },
   });
 
-  const { mutate } = useSignUp();
+  const { mutate, isPending } = useSignUp();
 
-  const onSubmit = async (data: UserSchemaTypes["signUp"]) => {
-    console.log("Submitting data:", data);
-    const { confirmPassword, ...payload } = data;
-
-    mutate(
-      {
-        username: payload.username,
-        email: payload.email,
-        password: payload.password,
+  const onSubmit = async (data: UserSchemaTypes["create"]) => {
+    mutate(data, {
+      onSuccess: () => {
+        toast.success("Account created successfully");
+        router.push("/home");
       },
-      {
-        onSuccess: () => {
-          toast.success("Account created successfully");
-          router.push("/home");
-        },
-        onError: (error) => {
-          toast.error(error.message || "Failed to create account");
-        },
-      }
-    );
+      onError: (error) => {
+        toast.error(error.message || "Failed to create account");
+      },
+    });
   };
 
   return (
@@ -109,11 +102,23 @@ export function SignUp() {
             </FormItem>
           )}
         />
-        <Button
-          className="w-full cursor-pointer bg-emerald-500 text-white hover:bg-emerald-400"
-          type="submit"
-        >
-          Create
+        <FormField
+          name="remember"
+          control={form.control}
+          render={({ field }) => (
+            <FormItem className="flex items-center space-x-2">
+              <FormControl>
+                <Checkbox
+                  checked={field.value}
+                  onCheckedChange={field.onChange}
+                />
+              </FormControl>
+              <FormLabel>Remember me</FormLabel>
+            </FormItem>
+          )}
+        />
+        <Button className="w-full" type="submit" disabled={isPending}>
+          {isPending ? "Creating..." : "Create"}
         </Button>
       </form>
     </Form>

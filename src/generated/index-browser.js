@@ -117,19 +117,10 @@ exports.Prisma.TransactionIsolationLevel = makeStrictEnum({
   Serializable: 'Serializable'
 });
 
-exports.Prisma.AccountScalarFieldEnum = {
-  id: 'id',
+exports.Prisma.OAuthAccountScalarFieldEnum = {
   userId: 'userId',
-  type: 'type',
   provider: 'provider',
   providerAccountId: 'providerAccountId',
-  refresh_token: 'refresh_token',
-  access_token: 'access_token',
-  expires_at: 'expires_at',
-  token_type: 'token_type',
-  scope: 'scope',
-  id_token: 'id_token',
-  session_state: 'session_state',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -145,14 +136,14 @@ exports.Prisma.LoginHistoryScalarFieldEnum = {
 
 exports.Prisma.UserScalarFieldEnum = {
   id: 'id',
+  image: 'image',
   username: 'username',
   email: 'email',
+  password: 'password',
   salt: 'salt',
   emailVerified: 'emailVerified',
-  image: 'image',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  password: 'password'
+  updatedAt: 'updatedAt'
 };
 
 exports.Prisma.EmailVerificationTokenScalarFieldEnum = {
@@ -214,6 +205,12 @@ exports.Prisma.NullsOrder = {
   first: 'first',
   last: 'last'
 };
+exports.Providers = exports.$Enums.Providers = {
+  google: 'google',
+  github: 'github',
+  discord: 'discord'
+};
+
 exports.Language = exports.$Enums.Language = {
   en: 'en',
   es: 'es',
@@ -267,7 +264,7 @@ exports.SnippetVisibility = exports.$Enums.SnippetVisibility = {
 };
 
 exports.Prisma.ModelName = {
-  Account: 'Account',
+  OAuthAccount: 'OAuthAccount',
   LoginHistory: 'LoginHistory',
   User: 'User',
   EmailVerificationToken: 'EmailVerificationToken',

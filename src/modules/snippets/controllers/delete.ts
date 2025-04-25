@@ -1,5 +1,4 @@
 import { deleteSnippet } from "@/modules/snippets";
-import { getUserIdBySession } from "@/modules/session";
 import { NextRequest, NextResponse } from "next/server";
 
 interface ById {
@@ -15,13 +14,7 @@ export const deleteSnippetController = async ({ req, params }: ById) => {
   }
 
   try {
-    const authorId = await getUserIdBySession.execute();
 
-    if (!authorId) {
-      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
-    }
-
-    await deleteSnippet.execute({ id, authorId });
 
     return NextResponse.json({ message: "Snippet deleted" }, { status: 200 });
   } catch (error) {

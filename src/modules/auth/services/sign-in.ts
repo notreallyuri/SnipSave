@@ -1,8 +1,9 @@
 import { IUserRepository } from "@/modules/user";
 import { Service, BaseUserData } from "@/interfaces";
+import { createSession } from "@/modules/session";
 import { UserSchemaTypes } from "@/schemas";
 import { customHasher } from "@/lib/utils";
-import { TRPCError } from "@trpc/server";
+import { AppError } from "@/lib/errors";
 
 export class SignInService
   implements Service<IUserRepository, UserSchemaTypes["signIn"], BaseUserData>
@@ -18,8 +19,8 @@ export class SignInService
         "dummySalt",
         "dummyHash"
       );
-      
-      throw new TRPCError({
+
+      throw new AppError({
         code: "UNAUTHORIZED",
         message: "Invalid credentials",
       });
@@ -32,7 +33,7 @@ export class SignInService
     );
 
     if (!isPasswordValid)
-      throw new TRPCError({
+      throw new AppError({
         code: "UNAUTHORIZED",
         message: "Invalid credentials",
       });
@@ -41,6 +42,7 @@ export class SignInService
       id: user.id,
       username: user.username,
       email: user.email,
+      isEmailVerified: !!user.emailVerified,
     };
   }
 }

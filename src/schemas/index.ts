@@ -1,2 +1,3 @@
-export * from "./user.schemas";
-export * from "./snippet.schemas";
+export * from "./user";
+export * from "./snippet";
+export * from "./preferences";

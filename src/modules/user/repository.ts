@@ -13,10 +13,11 @@ export interface IUserRepository {
   create(data: UserSchemaTypes["base"]): Promise<BaseUserData>;
   update(id: string, data: UserSchemaTypes["update"]): Promise<User>;
   delete(id: string): Promise<User>;
+  updateProfilePicture(id: string, url: string): Promise<void>;
   getPreferences(id: string): Promise<UserPreferences | null>;
   updatePreferences(
     id: string,
-    preferences: UserSchemaTypes["preferences"]
+    preferences: UserSchemaTypes["preferences"],
   ): Promise<UserPreferences | null>;
   isVerified(id: string): Promise<isVerifiedRes | null>;
   getBaseUserData(id: string): Promise<BaseUserData | null>;
@@ -26,7 +27,7 @@ export interface IUserRepository {
 
 export class UserRepository implements IUserRepository {
   async create(data: UserSchemaTypes["base"]): Promise<BaseUserData> {
-    return prisma.user.create({
+    const user = await prisma.user.create({
       data: {
         ...data,
         preferences: {
@@ -37,20 +38,40 @@ export class UserRepository implements IUserRepository {
         id: true,
         username: true,
         email: true,
+        emailVerified: true,
       },
     });
+
+    return {
+      id: user.id,
+      username: user.username,
+      email: user.email,
+      image: null,
+      isEmailVerified: !!user.emailVerified,
+    };
   }
 
   async getBaseUserData(id: string): Promise<BaseUserData | null> {
-    return prisma.user.findUnique({
+    const user = await prisma.user.findUnique({
       where: { id },
       select: {
         id: true,
         username: true,
         email: true,
         image: true,
+        emailVerified: true,
       },
     });
+
+    if (!user) return null;
+
+    return {
+      id: user.id,
+      username: user.username,
+      email: user.email,
+      image: user.image,
+      isEmailVerified: !!user.emailVerified,
+    };
   }
 
   async getUserById(id: string): Promise<User | null> {
@@ -83,7 +104,7 @@ export class UserRepository implements IUserRepository {
 
   updatePreferences(
     id: string,
-    preferences: UserSchemaTypes["preferences"]
+    preferences: UserSchemaTypes["preferences"],
   ): Promise<UserPreferences | null> {
     const parsed = UserSchema["preferences"].safeParse(preferences);
 
@@ -97,6 +118,15 @@ export class UserRepository implements IUserRepository {
     return prisma.userPreferences.update({
       where: { userId: id },
       data: parsed.data,
+    });
+  }
+
+  async updateProfilePicture(id: string, url: string): Promise<void> {
+    await prisma.user.update({
+      where: { id },
+      data: {
+        image: url,
+      },
     });
   }
 

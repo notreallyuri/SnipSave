@@ -5,14 +5,15 @@ import {
   GetUserById,
   UpdateUser,
   UpdateUserPreferences,
+  UpdateUserProfilePicture,
 } from "./services";
 import { GetUserPreferences } from "./services/preferences";
 
-const userFactory = <T>(Service: new (repository: IUserRepository) => T) => {
-  return new Service(new UserRepository());
-};
+const userFactory = <T>(Service: new (repository: IUserRepository) => T) =>
+  new Service(new UserRepository());
 
 const updateUser = userFactory(UpdateUser);
+const updateUserProfilePicture = userFactory(UpdateUserProfilePicture);
 const getUserByEmail = userFactory(GetUserByEmail);
 const getUserById = userFactory(GetUserById);
 const getBaseUserData = userFactory(GetBaseUserData);
@@ -26,4 +27,5 @@ export {
   updateUser,
   getPreferences,
   updatePreferences,
+  updateUserProfilePicture,
 };

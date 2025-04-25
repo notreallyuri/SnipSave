@@ -1,17 +1,20 @@
 import { NextRequest, NextResponse } from "next/server";
 import { updateUser, getPreferences, updatePreferences } from "@/modules/user";
-import { getUserIdBySession } from "@/modules/session";
+import { getUserBySession } from "@/modules/session";
 import { UserSchema } from "@/schemas";
 
 export async function updateUserPreferencesController(req: NextRequest) {
   try {
-    const id = await getUserIdBySession.execute();
+    const user = await getUserBySession.execute();
 
-    if (!id)
+    if (!user) {
       return NextResponse.json(
         { error: "User not authenticated" },
         { status: 401 }
       );
+    }
+
+    const { id } = user;
 
     const body = await req.json();
 
@@ -31,13 +34,15 @@ export async function updateUserPreferencesController(req: NextRequest) {
 
 export async function getUserPreferencesController() {
   try {
-    const id = await getUserIdBySession.execute();
+    const user = await getUserBySession.execute();
 
-    if (!id)
+    if (!user)
       return NextResponse.json(
         { error: "User not authenticated" },
         { status: 401 }
       );
+
+    const { id } = user;
 
     const pref = await getPreferences.execute(id);
 

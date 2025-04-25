@@ -68,6 +68,7 @@ export function SettingsDialog({
       defaultCodeLanguage: undefined,
       defaultSnippetVisibility: undefined,
       keyboardShortcuts: true,
+      notifications: true,
     },
   });
 
@@ -258,8 +259,8 @@ export function SettingsDialog({
               )}
             />
             <DialogFooter className="mt-4">
-              <Button type="submit" className="w-full">
-                Save changes
+              <Button type="submit" className="w-full" disabled={isPending}>
+                {isPending ? "Saving..." : "Save changes"}
               </Button>
             </DialogFooter>
           </form>

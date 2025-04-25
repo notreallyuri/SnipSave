@@ -1,18 +1,16 @@
 import {
+  GetUserBySession,
   CreateSessionService,
-  GetUserIdService,
-  DeleteSessionService,
+  DestroySessionService,
 } from "./services";
-import { SessionRepository, ISessionRepository } from "./repository";
+import { ISessionRepository, SessionRepository } from "./repository";
 
-const sessionFactory = <T>(
+const SessionFactory = <T>(
   Service: new (repository: ISessionRepository) => T
-) => {
-  return new Service(new SessionRepository());
-};
+) => new Service(new SessionRepository());
 
-const createSession = sessionFactory(CreateSessionService);
-const getUserIdBySession = sessionFactory(GetUserIdService);
-const deleteSession = sessionFactory(DeleteSessionService);
+const getUserBySession = SessionFactory(GetUserBySession);
+const createSession = SessionFactory(CreateSessionService);
+const destroySession = SessionFactory(DestroySessionService);
 
-export { createSession, getUserIdBySession, deleteSession };
+export { getUserBySession, createSession, destroySession };

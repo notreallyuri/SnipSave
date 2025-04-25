@@ -1,8 +1,8 @@
-import { useQuery, useMutation } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 
-function useGetBaseUserData() {
-  async function query() {
-    try {
+const useGetBaseUserData = () =>
+  useQuery({
+    queryFn: async () => {
       const res = await fetch("/api/user", {
         method: "GET",
         headers: {
@@ -17,16 +17,8 @@ function useGetBaseUserData() {
       const content = await res.json();
 
       return content;
-    } catch (error) {
-      console.error("Error fetching user data:", error);
-      throw error;
-    }
-  }
-
-  return useQuery({
-    queryFn: query,
-    queryKey: ["getBaseUserData"],
+    },
+    queryKey: ["user", "base", "get"],
   });
-}
 
 export { useGetBaseUserData };

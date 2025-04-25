@@ -2,6 +2,7 @@ import { IUserRepository } from "@/modules/user";
 import { Service, BaseUserData } from "@/interfaces";
 import { customHasher } from "@/lib/utils";
 import { UserSchemaTypes } from "@/schemas";
+import { createSession } from "@/modules/session";
 
 export class SignUpService
   implements Service<IUserRepository, UserSchemaTypes["create"], BaseUserData>
