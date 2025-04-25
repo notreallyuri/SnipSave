@@ -1,21 +1,17 @@
+import type { UpdateUserSchemaType } from "@/schemas";
+import { User } from "@/generated";
 import { IUserRepository } from "@/modules/user";
-import { UserSchemaTypes } from "@/schemas";
 import { Service } from "@/interfaces";
-import { User, UserPreferences } from "@/generated";
 
 export class UpdateUser
   implements
-    Service<
-      IUserRepository,
-      { id: string; data: UserSchemaTypes["update"] },
-      User
-    >
+    Service<IUserRepository, { id: string; data: UpdateUserSchemaType }, User>
 {
   constructor(public repository: IUserRepository) {}
 
   async execute(args: {
     id: string;
-    data: UserSchemaTypes["update"];
+    data: UpdateUserSchemaType;
   }): Promise<User> {
     const { id, data } = args;
 
@@ -32,25 +28,5 @@ export class UpdateUserProfilePicture
     const { id, url } = args;
 
     return this.repository.updateProfilePicture(id, url);
-  }
-}
-
-export class UpdateUserPreferences
-  implements
-    Service<
-      IUserRepository,
-      { id: string; data: UserSchemaTypes["preferences"] },
-      UserPreferences | null
-    >
-{
-  constructor(public repository: IUserRepository) {}
-
-  async execute(args: {
-    id: string;
-    data: UserSchemaTypes["preferences"];
-  }): Promise<UserPreferences | null> {
-    const { id, data } = args;
-
-    return this.repository.updatePreferences(id, data);
   }
 }

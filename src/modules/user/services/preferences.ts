@@ -1,3 +1,4 @@
+import { UserPreferencesSchemaTypes } from "@/schemas";
 import { IUserRepository } from "../repository";
 import { UserPreferences } from "@/generated";
 import { Service } from "@/interfaces";
@@ -12,4 +13,22 @@ export class GetUserPreferences
   }
 }
 
+export class UpdateUserPreferences
+  implements
+    Service<
+      IUserRepository,
+      { id: string; data: UserPreferencesSchemaTypes },
+      UserPreferences | null
+    >
+{
+  constructor(public repository: IUserRepository) {}
 
+  async execute(args: {
+    id: string;
+    data: UserPreferencesSchemaTypes;
+  }): Promise<UserPreferences | null> {
+    const { id, data } = args;
+
+    return this.repository.updatePreferences(id, data);
+  }
+}

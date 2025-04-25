@@ -5,7 +5,7 @@ import { SnippetSchema } from "@/schemas";
 export const createSnippetController = async (req: NextRequest) => {
   const body = await req.json();
 
-  const { data, error } = SnippetSchema.create.safeParse(body);
+  const { data, error } = SnippetSchema.safeParse(body);
 
   if (error) {
     return NextResponse.json(

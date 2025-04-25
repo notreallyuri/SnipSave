@@ -2,16 +2,6 @@ import { IUserRepository } from "@/modules/user";
 import { BaseUserData, Service } from "@/interfaces";
 import { User } from "@/generated";
 
-export class GetUserByEmail
-  implements Service<IUserRepository, string, User | null>
-{
-  constructor(public repository: IUserRepository) {}
-
-  async execute(email: string): Promise<User | null> {
-    return await this.repository.getUserByEmail(email);
-  }
-}
-
 export class GetUserById
   implements Service<IUserRepository, string, User | null>
 {

@@ -1,6 +1,6 @@
 import { createSnippet, updateSnippet } from "@/modules/snippets";
 import { NextRequest, NextResponse } from "next/server";
-import { SnippetSchema } from "@/schemas";
+import { SnippetSchema, UpdateSnippetSchema } from "@/schemas";
 
 interface ById {
   req: NextRequest;
@@ -10,15 +10,14 @@ interface ById {
 export const updateSnippetController = async ({ req, params }: ById) => {
   const id = params.id;
 
-
   const body = await req.json();
 
-  const { data, error } = SnippetSchema.update.safeParse(body);
+  const { data, error } = UpdateSnippetSchema.safeParse(body);
 
   if (error) {
     return NextResponse.json(
       { message: "Invalid data", issues: error.format() },
-      { status: 400 }
+      { status: 400 },
     );
   }
 
@@ -26,7 +25,7 @@ export const updateSnippetController = async ({ req, params }: ById) => {
   } catch (error) {
     return NextResponse.json(
       { message: "Internal server error" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 };

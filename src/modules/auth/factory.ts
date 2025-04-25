@@ -1,8 +1,8 @@
-import { IUserRepository, UserRepository } from "@/modules/user/repository";
+import { IAuthRepository, AuthRepository } from "./repository";
 import { SignUpService, SignInService } from "./services";
 
-const authFactory = <T>(Service: new (repository: IUserRepository) => T) =>
-  new Service(new UserRepository());
+const authFactory = <T>(Service: new (repository: IAuthRepository) => T) =>
+  new Service(new AuthRepository());
 
 const signUp = authFactory(SignUpService);
 const signIn = authFactory(SignInService);

@@ -1,14 +1,10 @@
 import { getIronSession, type SessionOptions } from "iron-session";
 import { baseSessionOptions, SessionData } from "@/modules/session/config";
+import type { UserData } from "@/types/user";
 import { cookies } from "next/headers";
 
 export type SessionInput = {
-  user: {
-    id: string;
-    username: string;
-    email: string;
-    isEmailVerified: boolean;
-  };
+  user: UserData;
   remember: boolean;
 };
 

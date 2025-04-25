@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
-import { updateUser, getPreferences, updatePreferences } from "@/modules/user";
+import { getPreferences, updatePreferences } from "@/modules/user";
 import { getUserBySession } from "@/modules/session";
-import { UserSchema } from "@/schemas";
+import { UserSchema, userPreferencesSchema } from "@/schemas";
 
 export async function updateUserPreferencesController(req: NextRequest) {
   try {
@@ -10,7 +10,7 @@ export async function updateUserPreferencesController(req: NextRequest) {
     if (!user) {
       return NextResponse.json(
         { error: "User not authenticated" },
-        { status: 401 }
+        { status: 401 },
       );
     }
 
@@ -18,7 +18,14 @@ export async function updateUserPreferencesController(req: NextRequest) {
 
     const body = await req.json();
 
-    const data = UserSchema.preferences.parse(body);
+    const { data, error } = userPreferencesSchema.safeParse(body);
+
+    if (error) {
+      return NextResponse.json(
+        { error: "Invalid data", details: error.format() },
+        { status: 400 },
+      );
+    }
 
     const updatedPref = await updatePreferences.execute({ id, data });
 
@@ -27,7 +34,7 @@ export async function updateUserPreferencesController(req: NextRequest) {
     console.error("Error updating user:", error);
     return NextResponse.json(
       { error: "Failed to update user" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -39,7 +46,7 @@ export async function getUserPreferencesController() {
     if (!user)
       return NextResponse.json(
         { error: "User not authenticated" },
-        { status: 401 }
+        { status: 401 },
       );
 
     const { id } = user;
@@ -51,7 +58,7 @@ export async function getUserPreferencesController() {
     console.error("Error getting user preferences:", error);
     return NextResponse.json(
       { error: "Failed to get user preferences" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

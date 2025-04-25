@@ -1,5 +1,3 @@
-import { Snippet } from "@/generated";
-import { SnippetSchemaTypes } from "@/schemas";
 import { Service } from "@/interfaces";
 import { ISnippetRepository } from "../repository";
 

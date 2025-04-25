@@ -1,5 +1,5 @@
 import { ISnippetRepository } from "../repository";
-import { SnippetSchemaTypes } from "@/schemas";
+import { SnippetTableType } from "@/schemas";
 import { Snippet } from "@/generated";
 import { Service } from "@/interfaces";
 
@@ -14,11 +14,11 @@ export class GetSnippetService
 }
 
 export class GetSnippetByAuthorService
-  implements Service<ISnippetRepository, string, SnippetSchemaTypes["table"][]>
+  implements Service<ISnippetRepository, string, SnippetTableType[]>
 {
   constructor(public repository: ISnippetRepository) {}
 
-  async execute(authorId: string): Promise<SnippetSchemaTypes["table"][]> {
+  async execute(authorId: string): Promise<SnippetTableType[]> {
     return await this.repository.getByAuthor(authorId);
   }
 }

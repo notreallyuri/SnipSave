@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { codeLanguage, snippetVisibility } from "./enums";
+import { codeLanguage, language, snippetVisibility } from "./enums";
 
 const SnippetSchema = z.object({
   title: z.string().trim().min(1).max(100),
@@ -9,10 +9,19 @@ const SnippetSchema = z.object({
   visibility: snippetVisibility.default("public"),
 });
 
-const updateSnippetSchema = SnippetSchema.partial();
+const SnippetTable = z.object({
+  id: z.string(),
+  title: z.string(),
+  language: z.string(),
+  createdAt: z.date(),
+  updatedAt: z.date(),
+});
+
+const UpdateSnippetSchema = SnippetSchema.partial();
 
 type SnippetSchemaType = z.infer<typeof SnippetSchema>;
-type UpdateSnippetType = z.infer<typeof updateSnippetSchema>;
+type SnippetTableType = z.infer<typeof SnippetTable>;
+type UpdateSnippetType = z.infer<typeof UpdateSnippetSchema>;
 
-export { SnippetSchema, updateSnippetSchema };
-export type { SnippetSchemaType, UpdateSnippetType };
+export { SnippetSchema, UpdateSnippetSchema, SnippetTable };
+export type { SnippetSchemaType, UpdateSnippetType, SnippetTableType };

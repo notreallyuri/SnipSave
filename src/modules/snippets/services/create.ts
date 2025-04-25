@@ -1,5 +1,5 @@
 import { ISnippetRepository } from "../repository";
-import { SnippetSchemaTypes } from "@/schemas";
+import { SnippetSchemaType } from "@/schemas";
 import { Service } from "@/interfaces";
 import { Snippet } from "@/generated";
 
@@ -7,7 +7,7 @@ export class CreateSnippetService
   implements
     Service<
       ISnippetRepository,
-      { authorId: string; data: SnippetSchemaTypes["create"] },
+      { authorId: string; data: SnippetSchemaType },
       Snippet
     >
 {
@@ -15,7 +15,7 @@ export class CreateSnippetService
 
   async execute(args: {
     authorId: string;
-    data: SnippetSchemaTypes["create"];
+    data: SnippetSchemaType;
   }): Promise<Snippet> {
     return await this.repository.create(args.authorId, args.data);
   }

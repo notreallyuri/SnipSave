@@ -7,7 +7,7 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export const customHasher = {
-  hashPassword(password: string, salt: string): Promise<string> {
+  hash(password: string, salt: string): Promise<string> {
     return new Promise((resolve, reject) => {
       crypto.scrypt(password.normalize(), salt, 64, (error, hash) => {
         if (error) return reject(error);
@@ -21,12 +21,12 @@ export const customHasher = {
     return crypto.randomBytes(16).toString("hex").normalize();
   },
 
-  async verifyPassword(password: string, salt: string, hashedPassword: string) {
-    const inputHashed = await this.hashPassword(password, salt);
+  async verify(password: string, salt: string, hashedPassword: string) {
+    const inputHashed = await this.hash(password, salt);
 
     return crypto.timingSafeEqual(
       Buffer.from(inputHashed, "hex"),
-      Buffer.from(hashedPassword, "hex")
+      Buffer.from(hashedPassword, "hex"),
     );
   },
 };

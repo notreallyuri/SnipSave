@@ -2,7 +2,7 @@ export type UserData = {
   id: string;
   username: string;
   email: string;
-  image?: string;
+  image: string | null;
   emailVerified?: boolean;
 };
 

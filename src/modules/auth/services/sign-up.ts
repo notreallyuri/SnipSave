@@ -1,31 +1,25 @@
-import { IUserRepository } from "@/modules/user";
-import { Service, BaseUserData } from "@/interfaces";
+import { IAuthRepository } from "../repository";
+import { Service } from "@/interfaces";
 import { customHasher } from "@/lib/utils";
-import { UserSchemaTypes } from "@/schemas";
+import { SignUpSchemaType } from "@/schemas";
 import { createSession } from "@/modules/session";
+import { UserData } from "@/types/user";
 
 export class SignUpService
-  implements Service<IUserRepository, UserSchemaTypes["create"], BaseUserData>
+  implements
+    Service<IAuthRepository, Omit<SignUpSchemaType, "remember">, UserData>
 {
-  constructor(public repository: IUserRepository) {}
+  constructor(public repository: IAuthRepository) {}
 
-  async execute(data: UserSchemaTypes["create"]): Promise<BaseUserData> {
-    const { email, password } = data;
-
-    const existingUser = await this.repository.getUserByEmail(email);
-    if (existingUser) {
-      throw new Error("NOT FOUND", {
-        cause: "User already exists",
-      });
-    }
+  async execute(data: Omit<SignUpSchemaType, "remember">): Promise<UserData> {
+    const { password, ...rest } = data;
 
     const salt = customHasher.generateSalt();
-    const hashedPassword = await customHasher.hashPassword(password, salt);
+    const hashedPassword = await customHasher.hash(password, salt);
 
-    const user = await this.repository.create({
-      ...data,
+    const user = await this.repository.signUp({
+      ...rest,
       password: hashedPassword,
-      salt,
     });
 
     return user;

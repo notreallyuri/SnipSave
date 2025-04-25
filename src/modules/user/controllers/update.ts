@@ -1,7 +1,7 @@
 import { getUserBySession } from "@/modules/session/factory";
 import { NextResponse, NextRequest } from "next/server";
 import { updateUser, updateUserProfilePicture } from "@/modules/user/factory";
-import { UserSchema } from "@/schemas";
+import { UserSchema, UpdateUserSchema } from "@/schemas";
 
 export async function updateUserController(req: NextRequest) {
   try {
@@ -18,7 +18,14 @@ export async function updateUserController(req: NextRequest) {
 
     const body = await req.json();
 
-    const data = UserSchema.update.parse(body);
+    const { data, error } = UpdateUserSchema.safeParse(body);
+
+    if (error) {
+      return NextResponse.json(
+        { error: "Invalid data", details: error.format() },
+        { status: 400 },
+      );
+    }
 
     await updateUser.execute({ id, data });
 

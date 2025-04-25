@@ -1,48 +1,48 @@
-import { IUserRepository } from "@/modules/user";
+import { IAuthRepository } from "../repository";
 import { Service, BaseUserData } from "@/interfaces";
 import { createSession } from "@/modules/session";
-import { UserSchemaTypes } from "@/schemas";
+import type { SignInSchemaType } from "@/schemas";
 import { customHasher } from "@/lib/utils";
 import { AppError } from "@/lib/errors";
+import type { UserData } from "@/types/user";
 
 export class SignInService
-  implements Service<IUserRepository, UserSchemaTypes["signIn"], BaseUserData>
+  implements
+    Service<IAuthRepository, Omit<SignInSchemaType, "remember">, UserData>
 {
-  constructor(public repository: IUserRepository) {}
+  constructor(public repository: IAuthRepository) {}
 
-  async execute(data: UserSchemaTypes["signIn"]): Promise<BaseUserData> {
-    const user = await this.repository.getUserByEmail(data.email);
+  async execute(data: Omit<SignInSchemaType, "remember">): Promise<UserData> {
+    const user = await this.repository.signIn(data);
 
-    if (!user) {
-      await customHasher.verifyPassword(
-        data.password,
-        "dummySalt",
-        "dummyHash"
-      );
-
+    if (!user.salt || !user.password) {
       throw new AppError({
-        code: "UNAUTHORIZED",
+        code: "BAD_REQUEST",
+        message: "User not authenticated through crendetials.",
+      });
+    }
+
+    const isPasswordValid = await customHasher.verify(
+      data.password,
+      user.salt,
+      user.password,
+    );
+
+    if (!isPasswordValid) {
+      throw new AppError({
+        code: "BAD_REQUEST",
         message: "Invalid credentials",
       });
     }
 
-    const isPasswordValid = await customHasher.verifyPassword(
-      data.password,
-      user.salt,
-      user.password
-    );
-
-    if (!isPasswordValid)
-      throw new AppError({
-        code: "UNAUTHORIZED",
-        message: "Invalid credentials",
-      });
-
-    return {
+    const userData: UserData = {
       id: user.id,
       username: user.username,
       email: user.email,
-      isEmailVerified: !!user.emailVerified,
+      image: user.image,
+      emailVerified: user.emailVerified,
     };
+
+    return userData;
   }
 }

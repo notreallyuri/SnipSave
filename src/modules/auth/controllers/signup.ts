@@ -1,17 +1,13 @@
 import { signUp } from "@/modules/auth";
 import { NextRequest, NextResponse } from "next/server";
-import { UserSchema, UserSchemaTypes } from "@/schemas";
+import { SignUpSchema } from "@/schemas";
 import { createSession } from "@/modules/session";
 
 export async function signUpController(req: NextRequest) {
   try {
     const body = await req.json();
-    console.log("Body:", body);
 
-    const { remember, confirmPassword, ...userData } =
-      body as UserSchemaTypes["signUp"];
-
-    const { data, error } = UserSchema.create.safeParse(userData);
+    const { data, error } = SignUpSchema.safeParse(body);
 
     if (error) {
       return NextResponse.json(
@@ -20,18 +16,13 @@ export async function signUpController(req: NextRequest) {
       );
     }
 
-    const user = await signUp.execute(data);
+    const { remember, ...rest } = data;
 
-    if (!user) {
-      return NextResponse.json(
-        { error: "User already exists" },
-        { status: 409 },
-      );
-    }
+    const user = await signUp.execute(rest);
 
     await createSession.execute({
       user,
-      remember
+      remember,
     });
 
     console.log("User created and session created:", user.id);

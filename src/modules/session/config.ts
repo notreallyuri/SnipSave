@@ -1,14 +1,9 @@
 import type { SessionOptions } from "iron-session";
+import type { UserData } from "@/types/user";
 import { COOKIE_SESSION_KEY } from "@/config";
 
 export interface SessionData {
-  user?: {
-    id: string;
-    username: string;
-    image?: string | null;
-    email: string;
-    isEmailVerified: boolean;
-  };
+  user?: UserData;
 }
 
 export const baseSessionOptions: SessionOptions = {

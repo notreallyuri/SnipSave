@@ -1,24 +1,33 @@
 import { signIn } from "@/modules/auth";
 import { NextRequest, NextResponse } from "next/server";
-import { UserSchema } from "@/schemas";
+import { SignInSchema } from "@/schemas";
 import { createSession } from "@/modules/session";
 
 export async function signInController(req: NextRequest) {
   try {
     const body = await req.json();
 
-    const data = UserSchema.signIn.parse(body);
+    const { data, error } = SignInSchema.safeParse(body);
 
-    const user = await signIn.execute(data);
+    if (error) {
+      return NextResponse.json(
+        { error: "Invalid data", details: error.flatten() },
+        { status: 422 },
+      );
+    }
+
+    const { remember, ...rest } = data;
+
+    const user = await signIn.execute(rest);
 
     console.log("Data:", {
       user,
-      remember: data.remember,
+      remember
     });
 
     await createSession.execute({
       user,
-      remember: data.remember,
+      remember
     });
 
     return NextResponse.json({ success: true }, { status: 200 });
