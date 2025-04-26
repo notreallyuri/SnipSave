@@ -2,6 +2,7 @@ import { signUp } from "@/modules/auth";
 import { NextRequest, NextResponse } from "next/server";
 import { SignUpSchema } from "@/schemas";
 import { createSession } from "@/modules/session";
+import { AppError } from "@/lib/errors";
 
 export async function signUpController(req: NextRequest) {
   try {
@@ -29,6 +30,15 @@ export async function signUpController(req: NextRequest) {
 
     return NextResponse.json({ user }, { status: 201 });
   } catch (error) {
+    if (error instanceof AppError) {
+      console.error("Error message:", error.message);
+
+      return NextResponse.json(
+        { error: error.message, details: error.meta },
+        { status: error.httpStatus },
+      );
+    }
+
     console.error("Error signing up:", error);
     return NextResponse.json({ error: "Failed to sign up" }, { status: 500 });
   }

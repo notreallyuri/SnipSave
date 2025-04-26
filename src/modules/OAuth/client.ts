@@ -2,30 +2,72 @@ import { AppError } from "@/lib/errors";
 import { env } from "@/config";
 import { z } from "zod";
 import { global_user } from "@/types/user";
+import { Providers } from "@/generated";
 
 export interface IOAuthRepository {
   fetchUser(code: string): Promise<global_user>;
 }
 
-export class OAuthRepository<T> {
-  private get redirectUrl(): URL {
-    return new URL("discord", env.OAUTH_REDIRECT_URL_BASE);
-  }
+export class OAuthClient<T> {
+  private readonly provider: Providers;
+  private readonly clientId: string;
+  private readonly clientSecret: string;
+  private readonly scopes: string[];
+  private readonly urls: {
+    auth: string;
+    token: string;
+    user: string;
+  };
+
+  private readonly userInfo: {
+    schema: z.ZodSchema<T>;
+    parser: (data: T) => { id: string; email: string; name: string };
+  };
 
   private readonly tokenSchema = z.object({
     access_token: z.string(),
     token_type: z.string(),
   });
 
-  private readonly userSchema = z.object({
-    id: z.string(),
-    username: z.string(),
-    global_name: z.string().nullable(),
-    email: z.string().email(),
-  });
+  constructor({
+    provider,
+    clientId,
+    clientSecret,
+    scopes,
+    urls,
+    userInfo,
+  }: {
+    provider: Providers;
+    clientId: string;
+    clientSecret: string;
+    scopes: string[];
+    urls: {
+      auth: string;
+      token: string;
+      user: string;
+    };
+    userInfo: {
+      schema: z.ZodSchema<T>;
+      parser: (data: T) => { id: string; email: string; name: string };
+    };
+  }) {
+    this.provider = provider;
+    this.clientId = clientId;
+    this.clientSecret = clientSecret;
+    this.scopes = scopes;
+    this.urls = urls;
+    this.userInfo = userInfo;
+  }
+
+  private get redirectUrl(): URL {
+    return new URL(
+      this.provider,
+      env.OAUTH_REDIRECT_URL_BASE,
+    );
+  }
 
   private async fetchToken(code: string) {
-    return fetch("https://discord.com/api/oauth2/token", {
+    return fetch(this.urls.token, {
       method: "POST",
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
@@ -35,8 +77,8 @@ export class OAuthRepository<T> {
         code,
         redirect_uri: this.redirectUrl.toString(),
         grant_type: "authorization_code",
-        client_id: env.DISCORD_CLIENT_ID,
-        client_secret: env.DISCORD_CLIENT_SECRET,
+        client_id: this.clientId,
+        client_secret: this.clientSecret,
       }),
     })
       .then((res) => res.json())
@@ -59,11 +101,11 @@ export class OAuthRepository<T> {
   }
 
   createAuthUrl() {
-    const url = new URL("https://discord.com/oauth2/authorize");
-    url.searchParams.set("client_id", env.DISCORD_CLIENT_ID);
+    const url = new URL(this.urls.auth);
+    url.searchParams.set("client_id", this.clientId);
     url.searchParams.set("redirect_uri", this.redirectUrl.toString());
     url.searchParams.set("response_type", "code");
-    url.searchParams.set("scope", "identify email");
+    url.searchParams.set("scope", this.scopes.join(" "));
 
     return url.toString();
   }
@@ -71,7 +113,7 @@ export class OAuthRepository<T> {
   async fetchUser(code: string) {
     const { accessToken, tokenType } = await this.fetchToken(code);
 
-    const user = await fetch("https://discord.com/api/users/@me", {
+    const user = await fetch(this.urls.user, {
       headers: {
         Authorization: `${tokenType} ${accessToken}`,
         "Content-Type": "application/json",
@@ -79,9 +121,9 @@ export class OAuthRepository<T> {
     })
       .then((res) => res.json())
       .then((rawData) => {
-        const { data, success, error } = this.userSchema.safeParse(rawData);
+        const { data, error } = this.userInfo.schema.safeParse(rawData);
 
-        if (!success) {
+        if (error) {
           throw new AppError({
             code: "BAD_REQUEST",
             message: "Invalid user",
@@ -92,10 +134,6 @@ export class OAuthRepository<T> {
         return data;
       });
 
-    return {
-      id: user.id,
-      email: user.email,
-      name: user.global_name ?? user.username,
-    };
+    return this.userInfo.parser(user);
   }
 }

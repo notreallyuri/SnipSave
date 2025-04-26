@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { OAuthFetchUser } from "../factory";
+import { getOAuthClient } from "../generators";
 import { createSession } from "@/modules/session";
 import { global_user } from "@/types/user";
 import { Providers } from "@/generated";
@@ -24,8 +24,10 @@ export async function getUserData(
     return NextResponse.redirect(errorUrl);
   }
 
+  const oAuthClient = getOAuthClient(provider);
+
   try {
-    const oAuthUser = await OAuthFetchUser.execute(code);
+    const oAuthUser = await oAuthClient.fetchUser(code);
     const user = await AccountToUser(oAuthUser, provider);
     await createSession.execute({ user, remember: false });
     return NextResponse.redirect(new URL("/home", req.url));

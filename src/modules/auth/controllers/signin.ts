@@ -1,5 +1,6 @@
 import { signIn } from "@/modules/auth";
 import { NextRequest, NextResponse } from "next/server";
+import { AppError } from "@/lib/errors";
 import { SignInSchema } from "@/schemas";
 import { createSession } from "@/modules/session";
 
@@ -22,17 +23,27 @@ export async function signInController(req: NextRequest) {
 
     console.log("Data:", {
       user,
-      remember
+      remember,
     });
 
     await createSession.execute({
       user,
-      remember
+      remember,
     });
 
     return NextResponse.json({ success: true }, { status: 200 });
   } catch (error) {
     console.error("Error signing in:", error);
+
+    if (error instanceof AppError) {
+      console.error("Error message:", error.message);
+
+      return NextResponse.json(
+        { error: error.message, details: error.meta },
+        { status: error.httpStatus },
+      );
+    }
+
     return NextResponse.json({ error: "Failed to sign in" }, { status: 500 });
   }
 }

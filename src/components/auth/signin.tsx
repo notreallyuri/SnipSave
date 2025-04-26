@@ -38,6 +38,8 @@ export function SignIn() {
         router.push("/home");
       },
       onError: (error: any) => {
+        console.error("Error signing in:", error);
+
         toast.error(error.message || "Something went wrong");
       },
     });
@@ -89,7 +91,11 @@ export function SignIn() {
           )}
         />
 
-        <Button type="submit" className="w-full cursor-pointer" disabled={isPending}>
+        <Button
+          type="submit"
+          className="w-full cursor-pointer"
+          disabled={isPending}
+        >
           {isPending ? "Signing in..." : "Sign In"}
         </Button>
       </form>

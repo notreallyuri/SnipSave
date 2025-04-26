@@ -13,7 +13,7 @@ import { SignUp } from "./signup";
 import { Button } from "@/components/ui/button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGithub, faDiscord } from "@fortawesome/free-brands-svg-icons";
-import { OAuthSignIn } from "@/modules/OAuth/services";
+import { oAuthSignIn } from "@/modules/OAuth/signin";
 
 export default function AuthContainer() {
   const router = useRouter();
@@ -61,12 +61,16 @@ export default function AuthContainer() {
             <div className="h-0.25 w-30 bg-black/25 dark:bg-white/50" />
           </div>
           {oauthError && (
-            <p className="flex text-sm -mb-2 -mt-2 items-center justify-center text-red-500 dark:text-red-400">
+            <p className="-mt-2 -mb-2 flex items-center justify-center text-sm text-red-500 dark:text-red-400">
               {decodeURIComponent(oauthError)}
             </p>
           )}
           <CardFooter className="grid grid-cols-2 gap-6">
-            <Button className="w-full cursor-pointer" variant={"outline"}>
+            <Button
+              className="w-full cursor-pointer"
+              variant={"outline"}
+              onClick={async () => await oAuthSignIn("github")}
+            >
               <FontAwesomeIcon icon={faGithub} className="text-lg" />
               Github
             </Button>
@@ -74,7 +78,7 @@ export default function AuthContainer() {
             <Button
               className="w-full cursor-pointer"
               variant={"outline"}
-              onClick={async () => await OAuthSignIn("discord")}
+              onClick={async () => await oAuthSignIn("discord")}
             >
               <FontAwesomeIcon icon={faDiscord} className="text-lg" />
               Discord

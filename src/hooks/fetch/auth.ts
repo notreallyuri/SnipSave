@@ -12,12 +12,12 @@ const useSignIn = () =>
         body: JSON.stringify(data),
       });
 
-      if (!res.ok) {
-        const err = await res.json();
-        throw new Error(err.message || "Failed to sign in");
-      }
-
       const content = await res.json();
+
+      if (!res.ok) {
+        console.error("Server error response:", content);
+        throw new Error(content.error || "Failed to sign in");
+      }
 
       return content;
     },
@@ -39,7 +39,7 @@ const useSignUp = () =>
 
       if (!res.ok) {
         console.error("Server error response:", content);
-        throw new Error(content.message || "Failed to sign up");
+        throw new Error(content.error || "Failed to sign up");
       }
 
       console.log("Server success response:", content);
