@@ -50,7 +50,7 @@ export default function Home() {
         <SearchBar />
       </header>
       <main className="grid w-full grid-cols-1 gap-4 p-4 pt-4 sm:grid-cols-2 lg:grid-cols-4">
-        <Card className="hover:shadow-lg dark:hover:shadow-emerald-400/20">
+        <Card className="dark:hover:shadow-primary hover:shadow-lg">
           <CardHeader>
             <CardTitle className="text-2xl">Create Snippet</CardTitle>
             <CardDescription>Create your own snippets</CardDescription>
@@ -62,7 +62,7 @@ export default function Home() {
           </CardContent>
         </Card>
 
-        <Card className="transition hover:shadow-lg dark:hover:shadow-emerald-400/20">
+        <Card className="dark:hover:shadow-primary transition hover:shadow-lg">
           <CardContent className="space-y-1 text-sm">
             <CardTitle className="text-2xl">Recently Edited</CardTitle>
             <p>🔸 auth.ts</p>
@@ -71,7 +71,7 @@ export default function Home() {
           </CardContent>
         </Card>
 
-        <Card className="transition hover:shadow-lg dark:hover:shadow-emerald-400/20">
+        <Card className="dark:hover:shadow-primarytransition hover:shadow-lg">
           <CardContent className="space-y-1 text-sm">
             <CardTitle className="text-2xl">Starred</CardTitle>
             <p>⭐ login-flow.tsx</p>
@@ -79,7 +79,7 @@ export default function Home() {
           </CardContent>
         </Card>
 
-        <Card className="transition hover:shadow-lg dark:hover:shadow-emerald-400/20">
+        <Card className="dark:hover:shadow-primary transition hover:shadow-lg">
           <CardContent className="text-sm">
             <CardTitle className="text-2xl">Your Stats</CardTitle>
             <p>📁 12 snippets</p>
@@ -87,7 +87,7 @@ export default function Home() {
             <p>👀 30 public views</p>
           </CardContent>
         </Card>
-        <Card className="transition hover:shadow-lg sm:col-span-2 lg:col-span-4 dark:hover:shadow-emerald-400/20">
+        <Card className="dark:hover:shadow-primary transition hover:shadow-lg sm:col-span-2 lg:col-span-4">
           <CardHeader>
             <CardTitle className="text-2xl">Complete your profile</CardTitle>
             <CardDescription>
@@ -97,12 +97,12 @@ export default function Home() {
           <CardContent className="space-y-2">
             <Progress
               value={20}
-              className="[&_[data-slot=progress-indicator]]:bg-emerald-500"
+              className="[&_[data-slot=progress-indicator]]:bg-primary"
             />
             <p className="text-muted-foreground text-sm">20%</p>
           </CardContent>
         </Card>
-        <Card className="col-span-1 gap-0 overflow-hidden rounded-lg pt-0 pb-2 transition hover:shadow-lg lg:col-span-4 dark:hover:shadow-emerald-400/20">
+        <Card className="dark:hover:shadow-primary col-span-1 gap-0 overflow-hidden rounded-lg pt-0 pb-2 transition hover:shadow-lg lg:col-span-4">
           <DataTable data={[]} />
         </Card>
       </main>

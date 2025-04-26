@@ -1,5 +1,5 @@
 import { useQuery, useMutation } from "@tanstack/react-query";
-import { SnippetSchemaTypes } from "@/schemas";
+import { SnippetSchemaType, UpdateSnippetType } from "@/schemas";
 
 const useGetSnippets = () =>
   useQuery({
@@ -70,10 +70,7 @@ const useDeleteSnippet = () =>
 const useUpdateSnippet = () =>
   useMutation({
     mutationKey: ["snippet", "update"],
-    mutationFn: async (args: {
-      id: string;
-      data: SnippetSchemaTypes["update"];
-    }) => {
+    mutationFn: async (args: { id: string; data: UpdateSnippetType }) => {
       const { id, data } = args;
 
       const res = await fetch(`/api/snippet/${id}`, {
@@ -97,7 +94,7 @@ const useUpdateSnippet = () =>
 const useCreateSnippet = () =>
   useMutation({
     mutationKey: ["snippet", "create"],
-    mutationFn: async (data: SnippetSchemaTypes["create"]) => {
+    mutationFn: async (data: SnippetSchemaType) => {
       const res = await fetch("/api/snippet", {
         method: "POST",
         headers: {

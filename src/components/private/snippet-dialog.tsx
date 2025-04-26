@@ -29,7 +29,7 @@ import { Textarea } from "../ui/textarea";
 
 import { CodeLanguage, SnippetVisibility } from "@/generated";
 
-import { SnippetSchema, SnippetSchemaTypes } from "@/schemas";
+import { SnippetSchema, SnippetSchemaType } from "@/schemas";
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -41,7 +41,7 @@ interface DialogProps {
 
 export function SnippetDialog({ children }: DialogProps) {
   const form = useForm({
-    resolver: zodResolver(SnippetSchema.create),
+    resolver: zodResolver(SnippetSchema),
     defaultValues: {
       title: "",
       description: "",
@@ -51,7 +51,7 @@ export function SnippetDialog({ children }: DialogProps) {
     },
   });
 
-  const onSubmit = async (data: SnippetSchemaTypes["create"]) => {
+  const onSubmit = async (data: SnippetSchemaType) => {
     console.log("Submitting data:", data);
   };
 
@@ -182,7 +182,7 @@ export function SnippetDialog({ children }: DialogProps) {
             />
 
             <DialogFooter>
-              <Button className="w-full text-white bg-emerald-500 hover:bg-emerald-400">
+              <Button className="w-full bg-emerald-500 text-white hover:bg-emerald-400">
                 Create Snippet
               </Button>
             </DialogFooter>

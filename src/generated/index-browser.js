@@ -117,7 +117,7 @@ exports.Prisma.TransactionIsolationLevel = makeStrictEnum({
   Serializable: 'Serializable'
 });
 
-exports.Prisma.OAuthAccountScalarFieldEnum = {
+exports.Prisma.AccountScalarFieldEnum = {
   userId: 'userId',
   provider: 'provider',
   providerAccountId: 'providerAccountId',
@@ -264,7 +264,7 @@ exports.SnippetVisibility = exports.$Enums.SnippetVisibility = {
 };
 
 exports.Prisma.ModelName = {
-  OAuthAccount: 'OAuthAccount',
+  Account: 'Account',
   LoginHistory: 'LoginHistory',
   User: 'User',
   EmailVerificationToken: 'EmailVerificationToken',

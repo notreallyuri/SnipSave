@@ -12,7 +12,7 @@ import { Button } from "../ui/button";
 import { Checkbox } from "../ui/checkbox";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { UserSchema, UserSchemaTypes } from "@/schemas";
+import { FrontSignUpSchema, SignUpSchemaType } from "@/schemas";
 import { useRouter } from "next/navigation";
 import { useSignUp } from "@/hooks/fetch";
 import { useForm } from "react-hook-form";
@@ -23,7 +23,7 @@ export function SignUp() {
   const router = useRouter();
 
   const form = useForm({
-    resolver: zodResolver(UserSchema.signUp),
+    resolver: zodResolver(FrontSignUpSchema),
     defaultValues: {
       username: "",
       email: "",
@@ -35,7 +35,7 @@ export function SignUp() {
 
   const { mutate, isPending } = useSignUp();
 
-  const onSubmit = async (data: UserSchemaTypes["create"]) => {
+  const onSubmit = async (data: SignUpSchemaType) => {
     mutate(data, {
       onSuccess: () => {
         toast.success("Account created successfully");
@@ -117,7 +117,7 @@ export function SignUp() {
             </FormItem>
           )}
         />
-        <Button className="w-full" type="submit" disabled={isPending}>
+        <Button className="w-full cursor-pointer" type="submit" disabled={isPending}>
           {isPending ? "Creating..." : "Create"}
         </Button>
       </form>

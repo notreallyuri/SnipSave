@@ -66,13 +66,15 @@ enum Providers {
   discord
 }
 
-model OAuthAccount {
+model Account {
   userId            String
   User              User      @relation(fields: [userId], references: [id])
   provider          Providers
-  providerAccountId String    @unique
+  providerAccountId String    @id @unique
   createdAt         DateTime  @default(now())
   updatedAt         DateTime  @updatedAt
+
+  @@unique([provider, providerAccountId])
 }
 
 model LoginHistory {
@@ -95,7 +97,7 @@ model User {
   emailVerified          Boolean                  @default(false)
   createdAt              DateTime                 @default(now())
   updatedAt              DateTime                 @updatedAt
-  accounts               OAuthAccount[]
+  accounts               Account[]
   loginHistory           LoginHistory[]
   preferences            UserPreferences?
   snippets               Snippet[]

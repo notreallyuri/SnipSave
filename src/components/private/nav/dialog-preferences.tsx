@@ -36,7 +36,7 @@ import {
 
 import { useGetPreferences, useUpdatePreferences } from "@/hooks/fetch";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { UserSchema, UserSchemaTypes } from "@/schemas";
+import { UserPreferencesSchemaTypes, userPreferencesSchema } from "@/schemas";
 import { useForm } from "react-hook-form";
 
 import React from "react";
@@ -52,15 +52,15 @@ export function SettingsDialog({
   const { data, isLoading } = useGetPreferences();
   const { mutate: updatePreferences, isPending } = useUpdatePreferences();
 
-  const preferences: UserSchemaTypes["preferences"] = data ?? {};
+  const preferences: UserPreferencesSchemaTypes = data ?? {};
 
   React.useEffect(() => {
     console.log("Fetched Data:", data);
     console.log("Extracted Preferences:", preferences);
   }, [data]);
 
-  const form = useForm<UserSchemaTypes["preferences"]>({
-    resolver: zodResolver(UserSchema["preferences"]),
+  const form = useForm({
+    resolver: zodResolver(userPreferencesSchema),
     defaultValues: data ?? {
       language: undefined,
       themePreference: undefined,
@@ -102,7 +102,7 @@ export function SettingsDialog({
       .toLowerCase()
       .replace(/\b\w/g, (c) => c.toUpperCase());
 
-  const onSubmit = async (data: UserSchemaTypes["preferences"]) => {
+  const onSubmit = async (data: UserPreferencesSchemaTypes) => {
     updatePreferences(data, {
       onSuccess: () => {
         setTheme(data.themePreference ?? "system");

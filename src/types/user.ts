@@ -16,3 +16,9 @@ export type SignInData = {
   email: string;
   password: string;
 };
+
+export type global_user = {
+  id: string;
+  email: string;
+  name: string;
+};

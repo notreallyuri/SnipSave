@@ -1,9 +1,9 @@
 import { useMutation } from "@tanstack/react-query";
-import { UserSchemaTypes } from "@/schemas";
+import { SignInSchemaType, SignUpSchemaType } from "@/schemas";
 
 const useSignIn = () =>
   useMutation({
-    mutationFn: async (data: UserSchemaTypes["signIn"]) => {
+    mutationFn: async (data: SignInSchemaType) => {
       const res = await fetch("/api/auth/signin", {
         method: "POST",
         headers: {
@@ -26,7 +26,7 @@ const useSignIn = () =>
 
 const useSignUp = () =>
   useMutation({
-    mutationFn: async (data: UserSchemaTypes["create"]) => {
+    mutationFn: async (data: SignUpSchemaType) => {
       const res = await fetch("/api/auth/signup", {
         method: "POST",
         headers: {

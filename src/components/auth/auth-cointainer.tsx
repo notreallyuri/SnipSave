@@ -12,12 +12,14 @@ import { SignIn } from "./signin";
 import { SignUp } from "./signup";
 import { Button } from "@/components/ui/button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faGithub, faGoogle } from "@fortawesome/free-brands-svg-icons";
+import { faGithub, faDiscord } from "@fortawesome/free-brands-svg-icons";
+import { OAuthSignIn } from "@/modules/OAuth/services";
 
 export default function AuthContainer() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const tab = searchParams.get("tab") ?? "signin";
+  const oauthError = searchParams.get("oauthError");
 
   const handleTabChange = (value: string) => {
     const newParams = new URLSearchParams(searchParams);
@@ -58,21 +60,24 @@ export default function AuthContainer() {
             or
             <div className="h-0.25 w-30 bg-black/25 dark:bg-white/50" />
           </div>
-          <CardFooter className="grid grid-cols-2 gap-6 text-emerald-500 dark:text-emerald-300">
-            <Button
-              className="w-full cursor-pointer hover:text-emerald-400 dark:hover:text-emerald-200"
-              variant={"outline"}
-            >
+          {oauthError && (
+            <p className="flex text-sm -mb-2 -mt-2 items-center justify-center text-red-500 dark:text-red-400">
+              {decodeURIComponent(oauthError)}
+            </p>
+          )}
+          <CardFooter className="grid grid-cols-2 gap-6">
+            <Button className="w-full cursor-pointer" variant={"outline"}>
               <FontAwesomeIcon icon={faGithub} className="text-lg" />
               Github
             </Button>
 
             <Button
-              className="w-full cursor-pointer hover:text-emerald-400 dark:hover:text-emerald-200"
+              className="w-full cursor-pointer"
               variant={"outline"}
+              onClick={async () => await OAuthSignIn("discord")}
             >
-              <FontAwesomeIcon icon={faGoogle} className="text-lg" />
-              Google
+              <FontAwesomeIcon icon={faDiscord} className="text-lg" />
+              Discord
             </Button>
           </CardFooter>
         </Card>

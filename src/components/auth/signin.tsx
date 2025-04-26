@@ -6,24 +6,22 @@ import {
   FormField,
   FormMessage,
   FormLabel,
-  useFormField,
 } from "../ui/form";
 import { Checkbox } from "../ui/checkbox";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { useSignIn } from "@/hooks/fetch";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { UserSchema, UserSchemaTypes } from "@/schemas";
+import { SignInSchema, SignInSchemaType } from "@/schemas";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { cn } from "@/lib/utils";
 
 export function SignIn() {
   const router = useRouter();
 
   const form = useForm({
-    resolver: zodResolver(UserSchema.signIn),
+    resolver: zodResolver(SignInSchema),
     defaultValues: {
       email: "",
       password: "",
@@ -33,7 +31,7 @@ export function SignIn() {
 
   const { mutate, isPending } = useSignIn();
 
-  const onSubmit = async (data: UserSchemaTypes["signIn"]) => {
+  const onSubmit = async (data: SignInSchemaType) => {
     mutate(data, {
       onSuccess: () => {
         toast.success("Logged in successfully");
@@ -91,7 +89,7 @@ export function SignIn() {
           )}
         />
 
-        <Button type="submit" className="w-full" disabled={isPending}>
+        <Button type="submit" className="w-full cursor-pointer" disabled={isPending}>
           {isPending ? "Signing in..." : "Sign In"}
         </Button>
       </form>

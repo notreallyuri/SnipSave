@@ -46,15 +46,31 @@ export function NavUser() {
   const { mutate } = useSignOut();
 
   if (isPending || !user) {
+    if (open) {
+      return (
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <SidebarMenuButton size="lg">
+              <Skeleton className="h-8 w-8 rounded-lg" />
+              <div className="grid flex-1 space-y-1 pl-3">
+                <Skeleton className="h-4 w-32" />
+                <Skeleton className="h-3 w-24" />
+              </div>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        </SidebarMenu>
+      );
+    }
+
     return (
       <SidebarMenu>
         <SidebarMenuItem>
-          <SidebarMenuButton size="lg">
-            <Skeleton className="h-8 w-8 rounded-lg" />
-            <div className="grid flex-1 space-y-1 pl-3">
-              <Skeleton className="h-4 w-32" />
-              <Skeleton className="h-3 w-24" />
-            </div>
+          <SidebarMenuButton size={"lg"}>
+            <SidebarMenu>
+              <SidebarMenuItem className="flex w-full justify-center">
+                <Skeleton className="size-8 rounded-lg" />
+              </SidebarMenuItem>
+            </SidebarMenu>
           </SidebarMenuButton>
         </SidebarMenuItem>
       </SidebarMenu>

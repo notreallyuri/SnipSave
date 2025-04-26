@@ -24,9 +24,7 @@ export default function Nav() {
           </Button>
         </Link>
         <Link href={"/auth?tab=signin"}>
-          <Button className="w-20 cursor-pointer bg-emerald-500 text-white hover:bg-emerald-400">
-            Sign In
-          </Button>
+          <Button className="w-20 cursor-pointer text-white bg-emerald-500">Sign In</Button>
         </Link>
         <ThemeToggle />
       </div>

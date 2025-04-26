@@ -7,6 +7,10 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export const customHasher = {
+  generateSalt() {
+    return crypto.randomBytes(16).toString("hex").normalize();
+  },
+
   hash(password: string, salt: string): Promise<string> {
     return new Promise((resolve, reject) => {
       crypto.scrypt(password.normalize(), salt, 64, (error, hash) => {
@@ -15,10 +19,6 @@ export const customHasher = {
         resolve(hash.toString("hex").normalize());
       });
     });
-  },
-
-  generateSalt() {
-    return crypto.randomBytes(16).toString("hex").normalize();
   },
 
   async verify(password: string, salt: string, hashedPassword: string) {

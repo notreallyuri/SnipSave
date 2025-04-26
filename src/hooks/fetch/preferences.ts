@@ -1,8 +1,8 @@
 import { useQuery, useMutation } from "@tanstack/react-query";
-import { UserSchema, UserSchemaTypes } from "@/schemas";
+import { userPreferencesSchema, UserPreferencesSchemaTypes } from "@/schemas";
 
 function useUpdatePreferences() {
-  async function fetchRes(data: UserSchemaTypes["preferences"]) {
+  async function fetchRes(data: UserPreferencesSchemaTypes) {
     try {
       const res = await fetch("/api/user/preferences", {
         method: "PATCH",
@@ -18,7 +18,7 @@ function useUpdatePreferences() {
 
       const content = await res.json();
 
-      const parsedData = UserSchema.preferences.parse(content);
+      const parsedData = userPreferencesSchema.parse(content);
       return parsedData;
     } catch (error) {
       console.error("Error fetching preferences:", error);
@@ -47,7 +47,7 @@ function useGetPreferences() {
       }
 
       const content = await res.json();
-      const parsedData = UserSchema.preferences.parse(content);
+      const parsedData = userPreferencesSchema.parse(content);
       return parsedData;
     } catch (error) {
       console.error("Error fetching preferences:", error);

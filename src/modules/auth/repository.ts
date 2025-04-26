@@ -10,7 +10,7 @@ export interface IAuthRepository {
   ): Promise<UserData & { password: string | null; salt: string | null }>;
 }
 
-export class AuthRepository {
+export class AuthRepository implements IAuthRepository {
   async signUp(data: Omit<SignUpSchemaType, "remember">): Promise<UserData> {
     const existingUser = await prisma.user.findUnique({
       where: { email: data.email },
