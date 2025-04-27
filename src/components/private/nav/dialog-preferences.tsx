@@ -23,7 +23,7 @@ import {
   SnippetVisibility,
   ThemePreference,
   Language,
-} from "@/generated/client";
+} from "@/backend/prisma/generated/client";
 
 import {
   Form,

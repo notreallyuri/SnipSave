@@ -1,6 +1,6 @@
 generator client {
   provider = "prisma-client-js"
-  output   = "../src/generated"
+  output   = "../src/backend/generated"
 }
 
 datasource db {
@@ -61,7 +61,6 @@ enum SnippetVisibility {
 }
 
 enum Providers {
-  google
   github
   discord
 }

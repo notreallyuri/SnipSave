@@ -5,7 +5,7 @@ import {
   Language,
   SnippetVisibility,
   ThemePreference,
-} from "@/generated/client";
+} from "@/backend/prisma/generated/client";
 
 const codeLanguage = z.nativeEnum(CodeLanguage);
 const editorTheme = z.nativeEnum(EditorTheme);

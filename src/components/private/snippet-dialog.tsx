@@ -27,7 +27,7 @@ import {
 } from "../ui/select";
 import { Textarea } from "../ui/textarea";
 
-import { CodeLanguage, SnippetVisibility } from "@/generated";
+import { CodeLanguage, SnippetVisibility } from "@/backend/prisma/generated";
 
 import { SnippetSchema, SnippetSchemaType } from "@/schemas";
 
